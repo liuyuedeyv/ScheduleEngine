@@ -9,12 +9,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\js\demo.js" />
-    <None Include="wwwroot\lib\jsplumb\jsplumb.js" />
-    <None Include="wwwroot\lib\jsplumb\jsplumb.min.js" />
-    <None Include="wwwroot\lib\jsplumb\jsplumbtoolkit-defaults.css" />
-    <None Include="wwwroot\lib\jsplumb\main.css" />
-  </ItemGroup>
-
 </Project>

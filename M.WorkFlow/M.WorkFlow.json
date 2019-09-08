@@ -1,0 +1,11 @@
+{
+  "Apollo": {
+  },
+  "fastdev": "server=np:\\\\.\\pipe\\LOCALDB#9DFF8383\\tsql\\query;database=fastdev;uid=sa;pwd=1234.com",
+  "ConnectionStrings": {
+    "default": "server=np:\\\\.\\pipe\\LOCALDB#9DFF8383\\tsql\\query;database=fastdev;uid=sa;pwd=1234.com"
+  },
+  "DBSetting": {
+    "fastdev": "FD.Simple.DB.DBContext.SqlServerDBContext,FD.Simple.DB"
+  }
+}

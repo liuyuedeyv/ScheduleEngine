@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.757
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fastdev", "Fastdev\Fastdev.csproj", "{D9C953F2-A973-4E06-A1CF-8BF9EC6C3B23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fastdev", "Fastdev\Fastdev.csproj", "{D9C953F2-A973-4E06-A1CF-8BF9EC6C3B23}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fastdev2", "Fastdev2\Fastdev2.csproj", "{2FBA585C-4FD4-4AB8-9FE9-C0EDC61C3182}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M.WorkFlow", "M.WorkFlow\M.WorkFlow.csproj", "{90DD5FD5-6BDA-4EC9-987A-17E139BF013A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{D9C953F2-A973-4E06-A1CF-8BF9EC6C3B23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9C953F2-A973-4E06-A1CF-8BF9EC6C3B23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9C953F2-A973-4E06-A1CF-8BF9EC6C3B23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FBA585C-4FD4-4AB8-9FE9-C0EDC61C3182}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FBA585C-4FD4-4AB8-9FE9-C0EDC61C3182}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FBA585C-4FD4-4AB8-9FE9-C0EDC61C3182}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FBA585C-4FD4-4AB8-9FE9-C0EDC61C3182}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90DD5FD5-6BDA-4EC9-987A-17E139BF013A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90DD5FD5-6BDA-4EC9-987A-17E139BF013A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90DD5FD5-6BDA-4EC9-987A-17E139BF013A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90DD5FD5-6BDA-4EC9-987A-17E139BF013A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
