@@ -102,3 +102,24 @@
 }
 
 path, .jtk-endpoint { cursor:pointer; }
+
+.wtype1 {
+    background-color: #76c679;
+    color: #fff;
+}
+.wtype2 {
+    background-color: #e55052;
+    color: #fff;
+}
+.wtype3 {
+    background-color: #efa112;
+    color: #fff;
+}
+.wtype4 {
+    background-color: #e5c385;
+    color: #fff;
+}
+.wtype5 {
+    background-color: #8d1010;
+    color: #fff;
+}

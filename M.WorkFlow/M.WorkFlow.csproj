@@ -25,4 +25,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FD.Simple.DB\FD.Simple.DB.csproj" />
+  </ItemGroup>
+
 </Project>

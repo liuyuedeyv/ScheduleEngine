@@ -31,16 +31,16 @@ namespace M.WorkFlow.Model
             set { _Name = value; OnPropertyChanged("Name"); }
         }
 
-        private string _Type;
-        /// <summary>
-        /// 节点类型
-        /// </summary>
-        [DataMember]
-        public string Type
-        {
-            get { return _Type; }
-            set { _Type = value; OnPropertyChanged("Type"); }
-        }
+        //private string _Type;
+        ///// <summary>
+        ///// 节点类型
+        ///// </summary>
+        //[DataMember]
+        //public string Type
+        //{
+        //    get { return _Type; }
+        //    set { _Type = value; OnPropertyChanged("Type"); }
+        //}
 
         private string _Xml;
         /// <summary>

@@ -1,11 +1,10 @@
 {
+  "cmdtimeout": 5,
   "Apollo": {
   },
-  "fastdev": "server=np:\\\\.\\pipe\\LOCALDB#9DFF8383\\tsql\\query;database=fastdev;uid=sa;pwd=1234.com",
-  "ConnectionStrings": {
-    "default": "server=np:\\\\.\\pipe\\LOCALDB#9DFF8383\\tsql\\query;database=fastdev;uid=sa;pwd=1234.com"
-  },
+  "fastdev": "server=localhost;database=fastdev;uid=root;pwd=1234.com;",
   "DBSetting": {
-    "fastdev": "FD.Simple.DB.DBContext.SqlServerDBContext,FD.Simple.DB"
+    "default": "fastdev",
+    "fastdev": "FD.Simple.DB.DBContext.MySqlDBContext,FD.Simple.DB.MySql"
   }
 }

@@ -47,13 +47,33 @@ namespace M.WorkFlow.Repository
             }
             using (var trans = TransHelper.BeginTrans())
             {
-                foreach (var task in flowEntity?.Tasks)
+                foreach (var task in flowEntity?.Tasks ?? new List<WFTaskEntity>())
                 {
-                    DataAccess.Update(task);
+                    var taskEntity = new WFTaskEntity();
+                    taskEntity.State = task.State;
+                    if (task.State == EDBEntityState.Added)
+                    {
+                        taskEntity.Flowid = flowEntity.ID;
+                        taskEntity.Name = task.Name;
+                    }
+                    taskEntity.ID = task.ID;
+                    taskEntity.X = task.X;
+                    taskEntity.Y = task.Y;
+                    taskEntity.Type = task.Type;
+                    DataAccess.Update(taskEntity);
                 }
-                foreach (var link in flowEntity?.Links)
+                foreach (var link in flowEntity?.Links ?? new List<WFLinkEntity>())
                 {
-                    DataAccess.Update(link);
+                    var linkEntity = new WFLinkEntity();
+                    linkEntity.State = link.State;
+                    if (link.State == EDBEntityState.Added)
+                    {
+                        linkEntity.Flowid = flowEntity.ID;
+                    }
+                    linkEntity.ID = link.ID;
+                    linkEntity.Begintaskid = link.Begintaskid;
+                    linkEntity.Endtaskid = link.Endtaskid;
+                    DataAccess.Update(linkEntity);
                 }
                 trans.Commit();
             }

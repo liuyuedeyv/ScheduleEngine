@@ -1,8 +1,10 @@
 ﻿using FD.Simple.DB;
 using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Provider;
+using M.WorkFlow.Engine;
 using M.WorkFlow.Model;
 using M.WorkFlow.Repository;
+using System.Linq;
 
 namespace M.WorkFlow
 {
@@ -12,7 +14,15 @@ namespace M.WorkFlow
         public IWorkFlowTemplate WorkFlowTemplate { get; set; }
 
         [Autowired]
-        public IDBContext DB { get; set; }
+        public System.Collections.Generic.IEnumerable<IBaseTask> Tasks { get; set; }
+
+
+        [Routing(EHttpMethod.HttpGet, "wft/getid")]
+        public string GetOneId()
+        {
+            return FD.Simple.Utils.DataKeyFactory.NewId();
+        }
+
 
         [Routing(EHttpMethod.HttpGet, "wft/getflowinfo")]
         public WFFlowEntity GetFlowInfo(string id)
@@ -39,6 +49,14 @@ namespace M.WorkFlow
             {
                 return this.WorkFlowTemplate.UpdateTemplate(flowEntity);
             }
+        }
+
+        [Routing(EHttpMethod.HttpGet, "wft/task")]
+        public CommonResult<int> Task()
+        {
+            
+
+            return 1;
         }
     }
 }
