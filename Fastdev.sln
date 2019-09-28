@@ -15,9 +15,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "engine", "engine", "{B20CFC
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{03EFF2B2-3903-4E23-A25E-A61128BB2BF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M.ACSA", "M.ACSA\M.ACSA.csproj", "{11B23EA6-5B56-4439-80CA-047161A2B0E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "M.ACSA", "M.ACSA\M.ACSA.csproj", "{11B23EA6-5B56-4439-80CA-047161A2B0E1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "acsa", "acsa", "{CF5825D1-89EE-43A6-BCCD-3E68E23BE8FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B2B80F33-5928-4BAE-95F9-640D3BB8866E}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
