@@ -9,11 +9,13 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Threading.Tasks;
+using System.Linq;
 namespace M.WorkFlow
 {
     public class WorkFlowAsyncService : CustomTimer, IRegisterModuleType
     {
+        uint batchCount = 10;
         public bool DisabledDefaultRegister => false;
 
         DataAccess _dataAccess;
@@ -28,12 +30,18 @@ namespace M.WorkFlow
         public override int ExeTask()
         {
             var filter = TableFilter.New().Equals("status", 0);
-            var jobs = _dataAccess.Query(WFMQEntity.TableCode).FixField("*").Paging(1, 10).Where(filter).QueryList<WFMQEntity>();
-            foreach (var job in jobs)
-            {
-                _workflow.Run(job);
-            }
-            return 1000;
+            var jobs = _dataAccess.Query(WFMQEntity.TableCode).FixField("*").Paging(1, batchCount).Where(filter).QueryList<WFMQEntity>();
+
+
+            Parallel.ForEach<WFMQEntity>(jobs,
+                new ParallelOptions()
+                {
+                    MaxDegreeOfParallelism = Environment.ProcessorCount
+                }, (job) =>
+                {
+                    _workflow.Run(job);
+                });
+            return batchCount == jobs.Count() ? 0 : 1000;
         }
 
         public void Register(ContainerBuilder services, IConfiguration configuration)

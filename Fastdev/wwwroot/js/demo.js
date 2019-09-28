@@ -151,7 +151,7 @@ jsPlumb.ready(function () {
         },
         drawNode: function (c, node) {
             node = this.initNodeData(node);
-            c.append(("<div type='" + node.type + "' class='w component " + node.class + "' id='" + node.id + "' style='left: " + node.x + "; top: " + node.y + ";" + node.style + " '><div class='taskTitle'>" + node.name + "</div><div class='ep'></div></div>"));
+            c.append(("<div type='" + node.type + "' data-shape='Diamond'  class='w component " + node.class + "' id='" + node.id + "' style='left: " + node.x + "; top: " + node.y + ";" + node.style + " '><div class='taskTitle'>" + node.name + "</div><div class='ep'></div></div>"));
             var $task = $("#" + node.id, c);
             $task.data('data', node);
 

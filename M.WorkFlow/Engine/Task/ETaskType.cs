@@ -25,6 +25,10 @@
         /// <summary>
         /// 聚合节点
         /// </summary>
-        JuHe = 6
+        JuHe = 6,
+        /// <summary>
+        /// 决策节点
+        /// </summary>
+        Model = 7
     }
 }
