@@ -14,7 +14,7 @@ namespace M.WorkFlow.Engine.Task
         public override DataAccess _DataAccess { get; set; }
         public override ETaskType TaskType => ETaskType.End;
 
-        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFMQEntity mqEntity)
+        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFTEventEntity mqEntity)
         {
             //结束节点不需要做具体任务
             Console.WriteLine($"结束节点{tinsEntity.Taskname}开始执行……");

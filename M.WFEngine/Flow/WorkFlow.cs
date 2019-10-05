@@ -41,7 +41,7 @@ namespace M.WorkFlow.Engine
         public int Callback(string mqId)
         {
             var filter = TableFilter.New().Equals("id", mqId);
-            var mqEntity = _DataAccess.Query(WFMQEntity.TableCode).FixField("*").Where(filter).QueryFirst<WFMQEntity>();
+            var mqEntity = _DataAccess.Query(WFTEventEntity.TableCode).FixField("*").Where(filter).QueryFirst<WFTEventEntity>();
 
             if (mqEntity == null)
             {
@@ -88,7 +88,7 @@ namespace M.WorkFlow.Engine
             return 1;
         }
 
-        public int Run(WFMQEntity mqEntity)
+        public int Run(WFTEventEntity mqEntity)
         {
             var taskEntity = _WFTask.GetTaskById(mqEntity.Taskid);
             var taskSetting = _WFTask.GetTaskInfo(taskEntity);
@@ -135,7 +135,7 @@ namespace M.WorkFlow.Engine
         public int Start(string flowId, string dataId)
         {
             var filter = TableFilter.New().Equals("status", 0);
-            var jobs = _DataAccess.Query(WFMQEntity.TableCode).FixField("*").Paging(1, 10).Where(filter).QueryList<WFMQEntity>();
+            var jobs = _DataAccess.Query(WFTEventEntity.TableCode).FixField("*").Paging(1, 10).Where(filter).QueryList<WFTEventEntity>();
 
 
             var startTask = _WFTask.GetStartTask(flowId);

@@ -13,7 +13,7 @@ namespace M.WorkFlow.Engine.Task
         /// <summary>
         /// 执行具体任务
         /// </summary>
-        public abstract bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFMQEntity mqEntity);
+        public abstract bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFTEventEntity mqEntity);
         /// <summary>
         /// 初始任务节点程实例信息
         /// </summary>
@@ -40,7 +40,7 @@ namespace M.WorkFlow.Engine.Task
         public virtual void CreateJob(WFFinsEntity fins, WFTinsEntity tinsEntity, bool needWaitCallback)
         {
             //插入MQ，流程监控启动
-            WFMQEntity nextEntity = new WFMQEntity();
+            WFTEventEntity nextEntity = new WFTEventEntity();
             nextEntity.Add();
             nextEntity.Flowid = tinsEntity.Flowid;
             nextEntity.Finsid = tinsEntity.Finsid;

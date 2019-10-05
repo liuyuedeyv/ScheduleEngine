@@ -3,9 +3,9 @@ using System.Runtime.Serialization;
 using FD.Simple.DB;
 namespace M.WorkFlow.Model
 {
-    public partial class WFMQEntity : DBEntity
+    public partial class WFTDataEntity : DBEntity
     {
-        public const string TableCode = "WFMQ";
+        public const string TableCode = "WFTDATA";
         public override string _TableCode { get { return TableCode; } }
 
         private string _Flowid;
@@ -30,16 +30,6 @@ namespace M.WorkFlow.Model
             get { return _Finsid; }
             set { _Finsid = value; OnPropertyChanged("Finsid"); }
         }
-        private string _DataId;
-        /// <summary>
-        /// 工作流ID
-        /// </summary>
-        [DataMember]
-        public string Dataid
-        {
-            get { return _DataId; }
-            set { _DataId = value; OnPropertyChanged("Dataid"); }
-        }
 
         private string _Taskid;
         /// <summary>
@@ -62,28 +52,6 @@ namespace M.WorkFlow.Model
             set { _Tinsid = value; OnPropertyChanged("Tinsid"); }
         }
 
-        private int _Status;
-        /// <summary>
-        /// 工作流ID
-        /// </summary>
-        [DataMember]
-        public int Status
-        {
-            get { return _Status; }
-            set { _Status = value; OnPropertyChanged("Status"); }
-        }
-        private int _Waitcallback;
-        /// <summary>
-        /// 工作流ID
-        /// </summary>
-        [DataMember]
-        public int Waitcallback
-        {
-            get { return _Waitcallback; }
-            set { _Waitcallback = value; OnPropertyChanged("Waitcallback"); }
-        }
-
-
         private DateTime _Cdate;
         /// <summary>
         /// 工作流ID
@@ -96,27 +64,15 @@ namespace M.WorkFlow.Model
         }
 
 
-        private DateTime _ProcessDate;
+        private string _JsonData;
         /// <summary>
         /// 工作流ID
         /// </summary>
         [DataMember]
-        public DateTime ProcessDate
+        public string JsonData
         {
-            get { return _ProcessDate; }
-            set { _ProcessDate = value; OnPropertyChanged("ProcessDate"); }
-        }
-
-
-        private DateTime _Callbackdate;
-        /// <summary>
-        /// 工作流ID
-        /// </summary>
-        [DataMember]
-        public DateTime Callbackdate
-        {
-            get { return _Callbackdate; }
-            set { _Callbackdate = value; OnPropertyChanged("Callbackdate"); }
+            get { return _JsonData; }
+            set { _JsonData = value; OnPropertyChanged("JsonData"); }
         }
     }
 }//end

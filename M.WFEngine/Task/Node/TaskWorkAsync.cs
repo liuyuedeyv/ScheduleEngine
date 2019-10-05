@@ -22,7 +22,7 @@ namespace M.WorkFlow.Engine.Task
 
         static HttpClient httpClient = new HttpClient();
         private static readonly object asyncLock = new object();
-        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFMQEntity mqEntity)
+        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFTEventEntity mqEntity)
         {
             Console.WriteLine($"异步节点{tinsEntity.Taskname}开始执行……");
 

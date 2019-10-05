@@ -33,10 +33,10 @@ namespace M.WorkFlow
         public override int ExeTask()
         {
             var filter = TableFilter.New().Equals("status", 0);//.Equals("waitcallback", 0);
-            var jobs = _dataAccess.Query(WFMQEntity.TableCode).FixField("*").Paging(1, batchCount).Where(filter).QueryList<WFMQEntity>();
+            var jobs = _dataAccess.Query(WFTEventEntity.TableCode).FixField("*").Paging(1, batchCount).Where(filter).QueryList<WFTEventEntity>();
 
 
-            Parallel.ForEach<WFMQEntity>(jobs,
+            Parallel.ForEach<WFTEventEntity>(jobs,
                 new ParallelOptions()
                 {
                     MaxDegreeOfParallelism = Environment.ProcessorCount

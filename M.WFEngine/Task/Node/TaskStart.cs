@@ -13,7 +13,7 @@ namespace M.WorkFlow.Engine.Task
         [Autowired]
         public override DataAccess _DataAccess { get; set; }
         public override ETaskType TaskType => ETaskType.Start;
-        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFMQEntity mqEntity)
+        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFTEventEntity mqEntity)
         {
             //开始节点不需要执行具体任务           
             Console.WriteLine($"开始节点{tinsEntity.Taskname}开始执行……");

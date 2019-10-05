@@ -15,7 +15,7 @@ namespace M.WorkFlow.Engine.Task
 
         public override ETaskType TaskType => ETaskType.BingXing;
 
-        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFMQEntity mqEntity)
+        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFTEventEntity mqEntity)
         {
             Console.WriteLine($"并行节点{tinsEntity.Taskname}开始执行……");
 

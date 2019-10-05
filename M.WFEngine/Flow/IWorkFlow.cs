@@ -19,7 +19,7 @@ namespace M.WorkFlow.Engine
         /// </summary>
         /// <param name="mqEntity"></param>
         /// <returns></returns>
-        int Run(WFMQEntity mqEntity);
+        int Run(WFTEventEntity mqEntity);
         /// <summary>
         /// 执行任务的回调
         /// </summary>
