@@ -17,8 +17,9 @@ namespace M.WorkFlow.Engine.Task
         public override DataAccess _DataAccess { get; set; }
         public override ETaskType TaskType => ETaskType.Model;
 
-        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity)
+        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFMQEntity mqEntity)
         {
+            Console.WriteLine($"决策节点{tinsEntity.Taskname}开始执行……");
             //调取远方模型进行预算，返回结果
             return true;
         }

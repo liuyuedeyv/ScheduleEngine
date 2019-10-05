@@ -15,7 +15,7 @@ namespace M.WorkFlow.Engine.Task
 
         public override ETaskType TaskType => ETaskType.JuHe;
 
-        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity)
+        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFMQEntity mqEntity)
         {
             Console.WriteLine($"聚合节点{tinsEntity.Taskname}开始执行……");
 

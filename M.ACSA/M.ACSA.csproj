@@ -1,8 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>E:\shishuai.tfs\fastdev\apiloader\Module\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="M.ACSA.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="M.ACSA.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\M.WFEngine\M.WFEngine.csproj" />

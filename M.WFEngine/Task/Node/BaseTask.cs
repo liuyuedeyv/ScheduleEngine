@@ -1,12 +1,10 @@
 ﻿using FD.Simple.DB;
+using M.WFEngine.Task;
+using M.WorkFlow.Engine;
 using M.WorkFlow.Model;
 
-namespace M.WorkFlow.Engine
+namespace M.WorkFlow.Engine.Task
 {
-    public interface IBaseTask
-    {
-
-    }
     public abstract class BaseTask : IBaseTask
     {
         public abstract DataAccess _DataAccess { get; set; }
@@ -15,7 +13,7 @@ namespace M.WorkFlow.Engine
         /// <summary>
         /// 执行具体任务
         /// </summary>
-        public abstract bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity);
+        public abstract bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFMQEntity mqEntity);
         /// <summary>
         /// 初始任务节点程实例信息
         /// </summary>

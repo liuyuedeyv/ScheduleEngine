@@ -1,0 +1,1 @@
+dotnet M.RemoteService.dll server.urls=http://localhost:5004

@@ -3,7 +3,13 @@ using FD.Simple.Utils.Agent;
 using M.WorkFlow.Model;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Caching;
 using System.Text;
+using System.Threading.Tasks;
+using WebApiClient;
+using WebApiClient.Attributes;
+using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace M.WorkFlow.Engine.Task
 {
@@ -14,10 +20,22 @@ namespace M.WorkFlow.Engine.Task
         public override DataAccess _DataAccess { get; set; }
         public override ETaskType TaskType => ETaskType.WorkAsync;
 
-        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity)
+        static HttpClient httpClient = new HttpClient();
+        private static readonly object asyncLock = new object();
+        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFMQEntity mqEntity)
         {
             Console.WriteLine($"异步节点{tinsEntity.Taskname}开始执行……");
 
+            //lock (asyncLock)
+            //{
+            var url = $@"http://localhost:5004/api/task?CallbackTag={mqEntity.ID}";
+
+
+            //httpClient.Timeout = new TimeSpan(0, 0, 10);
+            httpClient.GetAsync(url).GetAwaiter().GetResult();
+
+
+            //}
             return false;
         }
     }

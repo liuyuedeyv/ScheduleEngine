@@ -14,7 +14,7 @@ namespace M.WorkFlow.Engine.Task
         public override DataAccess _DataAccess { get; set; }
         public override ETaskType TaskType => ETaskType.End;
 
-        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity)
+        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFMQEntity mqEntity)
         {
             //结束节点不需要做具体任务
             Console.WriteLine($"结束节点{tinsEntity.Taskname}开始执行……");
@@ -30,7 +30,7 @@ namespace M.WorkFlow.Engine.Task
         public override void CreateJob(WFFinsEntity fins, WFTinsEntity tinsEntity, bool needWaitCallback)
         {
             //不用为结束节点创建待执行任务，直接执行runtask即可
-            RunTask(fins, tinsEntity);
+            RunTask(fins, tinsEntity, null);
         }
     }
 }

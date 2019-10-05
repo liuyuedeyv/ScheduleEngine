@@ -23,7 +23,7 @@ namespace M.WorkFlow.Engine.Task
 
         public override ETaskType TaskType => ETaskType.Work;
 
-        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity)
+        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFMQEntity mqEntity)
         {
             Console.WriteLine($"同步节点{tinsEntity.Taskname}开始执行……");
             var job = Jobs.Where(j => j.TaskType == this.TaskType).FirstOrDefault();

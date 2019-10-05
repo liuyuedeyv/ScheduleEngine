@@ -1,0 +1,10 @@
+{
+  "cmdtimeout": 5,
+  "Apollo": {
+  },
+  "fastdev": "server=localhost;database=fastdev;uid=root;pwd=1234.com;",
+  "DBSetting": {
+    "default": "fastdev",
+    "fastdev": "FD.Simple.DB.DBContext.MySqlDBContext,FD.Simple.DB.MySql"
+  }
+}

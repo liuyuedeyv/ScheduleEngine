@@ -6,43 +6,6 @@ using System.Linq;
 
 namespace M.WorkFlow.Engine
 {
-
-    public interface IWorkFlow
-    {
-        /// <summary>
-        /// 启动流程
-        /// </summary>
-        /// <param name="flowId"></param>
-        /// <param name="dataId"></param>
-        /// <returns></returns>
-        int Start(string flowId, string dataId);
-        /// <summary>
-        /// 执行任务
-        /// </summary>
-        /// <param name="mqEntity"></param>
-        /// <returns></returns>
-        int Run(WFMQEntity mqEntity);
-        /// <summary>
-        /// 执行任务的回调
-        /// </summary>
-        /// <param name="mqId"></param>
-        /// <returns></returns>
-        int Callback(string mqId);
-        /// <summary>
-        /// 创建流程实例
-        /// </summary>
-        /// <param name="flowId"></param>
-        /// <param name="dataId"></param>
-        /// <returns></returns>
-        WFFinsEntity CreatFlowInstance(string flowId, string dataId);
-        /// <summary>
-        /// 获取流程实例信息
-        /// </summary>
-        /// <param name="finsId"></param>
-        /// <returns></returns>
-        WFFinsEntity GetFlowInstance(string finsId);
-    }
-
     [Autowired]
     public class WorkFlow : IWorkFlow
     {
@@ -88,7 +51,11 @@ namespace M.WorkFlow.Engine
             var tinsEntity = _WFTask.GetTinsById(mqEntity.Tinsid);
             var taskEntity = _WFTask.GetTaskById(mqEntity.Taskid);
             var fins = this.GetFlowInstance(mqEntity.Finsid);
-
+            var nextTasks = _WFTask.GetNextTasks(taskEntity);
+            if (nextTasks.Length != 1)
+            {
+                throw new Exception("流程配置错误，下个任务节点数量必须是1");
+            }
             using (var trans = TransHelper.BeginTrans())
             {
                 //1、更新任务实例状态
@@ -101,13 +68,7 @@ namespace M.WorkFlow.Engine
                 tinsEntity.Edate = DateTime.Now;
                 _DataAccess.Update(tinsEntity);
 
-
                 //2、找下个任务节点，并流转
-                var nextTasks = _WFTask.GetNextTasks(taskEntity);
-                if (nextTasks.Length != 1)
-                {
-                    throw new Exception("流程配置错误，下个任务节点数量必须是1");
-                }
                 var nextTask = nextTasks[0];
                 bool parallelCompleted = true;
                 if (nextTask.Type == ETaskType.JuHe)
@@ -115,7 +76,7 @@ namespace M.WorkFlow.Engine
                     //判断上游节点是否全部完成
                     var preTasks = _WFTask.GetPreTasks(nextTask);
                     var tins = _WFTask.GetTinssById(fins.ID, preTasks.Select(t => t.ID).ToArray());
-                    parallelCompleted = tins.Where(t => t.Edate == DateTime.MinValue).Count() == 0;
+                    parallelCompleted = preTasks.Count() == tins.Count() && tins.Where(t => t.Edate == DateTime.MinValue).Count() == 0;
                 }
                 if (parallelCompleted)
                 {
@@ -136,7 +97,7 @@ namespace M.WorkFlow.Engine
             using (var tran = TransHelper.BeginTrans())
             {
                 //1、执行具体任务，并更新任务队列信息
-                var continueRun = taskSetting.RunTask(fins, tinsEntity);
+                var continueRun = taskSetting.RunTask(fins, tinsEntity, mqEntity);
 
                 mqEntity.State = EDBEntityState.Modified;
                 mqEntity.Status = 1;
@@ -158,7 +119,7 @@ namespace M.WorkFlow.Engine
                         taskSetting = _WFTask.GetTaskInfo(task);
                         if (task.Type == ETaskType.End)
                         {
-                            taskSetting.RunTask(fins, tinsNext);
+                            taskSetting.RunTask(fins, tinsNext, mqEntity);
                         }
                         else
                         {
@@ -193,7 +154,7 @@ namespace M.WorkFlow.Engine
                 //1、创建流程实例、开始节点实例，执行开始节点任务
                 var fins = this.CreatFlowInstance(flowId, dataId);
                 var tinsStart = _WFTask.CreateTaskIns(fins, startTask);
-                _WFTask.GetTaskInfo(startTask).RunTask(fins, tinsStart);
+                _WFTask.GetTaskInfo(startTask).RunTask(fins, tinsStart, null);
 
                 //2、获取下一个任务节点，并且创建待执行任务
                 var tinsNext = _WFTask.CreateTaskIns(fins, nextTask);
