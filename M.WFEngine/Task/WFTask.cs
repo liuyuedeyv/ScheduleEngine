@@ -7,17 +7,23 @@ using System.Text;
 using System.Linq;
 using M.WorkFlow.Engine.Task;
 using M.WFEngine.Task;
-
+using FD.Simple.Utils;
+using FD.Simple.Utils.Serialize;
+using M.WFEngine.Model;
+using M.WFEngine.Util;
 namespace M.WorkFlow.Engine
 {
 
-  
+
 
     [Autowired]
     public class WFTask : IWFTask
     {
         [Autowired]
         public DataAccess DataAccess { get; set; }
+
+        [Autowired]
+        public IJsonConverter _JsonConverter { get; set; }
 
         [Autowired]
         public System.Collections.Generic.IEnumerable<IBaseTask> Tasks { get; set; }
@@ -30,13 +36,43 @@ namespace M.WorkFlow.Engine
             var tins = taskSetting.Init(fins, taskEntity);
             return tins;
         }
-        public WFTaskEntity[] GetNextTasks(WFTaskEntity preTask)
+        public WFTaskEntity[] GetNextTasks(WFTaskEntity preTask, WFTinsEntity tinsEntity)
         {
-            //TODO:判断如果并行节点返回多个后续节点，如果是普通节点则返回一个
             var filter = TableFilter.New().Equals("BEGINTASKID", preTask.ID);
             var links = DataAccess.Query(WFLinkEntity.TableCode)
-                 .FixField("*").Where(filter).QueryList<WFLinkEntity>();
+                 .FixField("*").Where(filter).QueryList<WFLinkEntity>().ToList();
 
+            //1、决策节点需要获取返回数据进行选择
+            if (preTask.Type == ETaskType.Model && links.Count() > 1)
+            {
+                filter = TableFilter.New().Equals("TINSID", tinsEntity.ID);
+                var jsonData = DataAccess.Query(WFTDataEntity.TableCode).FixField("JSONDATA").Where(filter).QueryScalar().ConvertTostring();
+                var dataList = new List<WFJsonDataEntity>();
+                dataList.Add(_JsonConverter.Deserialize<WFJsonDataEntity>(jsonData));
+                foreach (var link in links.OrderByDescending(l => l.Priority))
+                {
+                    bool hitRule = false;
+                    if (string.IsNullOrWhiteSpace(link.Filter))
+                    {
+                        hitRule = true;
+                    }
+                    else
+                    {
+                        var conditionFilter = _JsonConverter.Deserialize<TableFilter>(link.Filter);
+                        hitRule = dataList.QueryDynamic(conditionFilter).Count() == 1;
+                    }
+                    if (hitRule)
+                    {
+                        links = new List<WFLinkEntity>();
+                        links.Add(link);
+                        break;
+                    }
+                }
+            }
+            else if (preTask.Type != ETaskType.BingXing && links.Count() > 1)
+            {
+                //TODO:判断如果并行节点返回多个后续节点，如果是普通节点则返回一个
+            }
             if (links.Count() == 1)
             {
                 filter = TableFilter.New().Equals("ID", string.Join(',', links.Select(l => l.Endtaskid).ToArray()));

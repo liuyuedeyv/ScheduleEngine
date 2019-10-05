@@ -18,7 +18,7 @@ namespace M.WorkFlow.Engine
         /// <summary>
         /// 获取下一个执行任务，如果是并行任务返回多个
         /// </summary>
-        WFTaskEntity[] GetNextTasks(WFTaskEntity preTask);
+        WFTaskEntity[] GetNextTasks(WFTaskEntity preTask, WFTinsEntity tinsEntity);
         /// <summary>
         /// 获取下一个执行任务，如果是并行任务返回多个
         /// </summary>

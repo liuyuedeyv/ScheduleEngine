@@ -51,7 +51,7 @@ namespace M.WorkFlow.Engine
             var tinsEntity = _WFTask.GetTinsById(mqEntity.Tinsid);
             var taskEntity = _WFTask.GetTaskById(mqEntity.Taskid);
             var fins = this.GetFlowInstance(mqEntity.Finsid);
-            var nextTasks = _WFTask.GetNextTasks(taskEntity);
+            var nextTasks = _WFTask.GetNextTasks(taskEntity, tinsEntity);
             if (nextTasks.Length != 1)
             {
                 throw new Exception("流程配置错误，下个任务节点数量必须是1");
@@ -112,7 +112,7 @@ namespace M.WorkFlow.Engine
                     _DataAccess.Update(tinsEntity);
 
                     //3、生成下一个节点任务实例、并执行流转
-                    var nextTasks = _WFTask.GetNextTasks(taskEntity);
+                    var nextTasks = _WFTask.GetNextTasks(taskEntity, tinsEntity);
                     foreach (var task in nextTasks)
                     {
                         var tinsNext = _WFTask.CreateTaskIns(fins, task);
@@ -143,17 +143,19 @@ namespace M.WorkFlow.Engine
             {
                 throw new Exception("没有找到开始节点");
             }
-            var nextTasks = _WFTask.GetNextTasks(startTask);
-            if (nextTasks == null || nextTasks.Length != 1)
-            {
-                throw new Exception("没有找到唯一的下一个任务节点");
-            }
-            var nextTask = nextTasks[0];
+
             using (var trans = TransHelper.BeginTrans())
             {
                 //1、创建流程实例、开始节点实例，执行开始节点任务
                 var fins = this.CreatFlowInstance(flowId, dataId);
                 var tinsStart = _WFTask.CreateTaskIns(fins, startTask);
+
+                var nextTasks = _WFTask.GetNextTasks(startTask, tinsStart);
+                if (nextTasks == null || nextTasks.Length != 1)
+                {
+                    throw new Exception("没有找到唯一的下一个任务节点");
+                }
+                var nextTask = nextTasks[0];
                 _WFTask.GetTaskInfo(startTask).RunTask(fins, tinsStart, null);
 
                 //2、获取下一个任务节点，并且创建待执行任务
