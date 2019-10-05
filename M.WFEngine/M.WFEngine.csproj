@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\M.WorkFlow\Model\auto\WFFinsEntity.cs" Link="Model\auto\WFFinsEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Model\auto\WFFlowEntity.cs" Link="Model\auto\WFFlowEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Model\auto\WFLinkEntity.cs" Link="Model\auto\WFLinkEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Model\auto\WFMQEntity.cs" Link="Model\auto\WFMQEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Model\auto\WFOinsEntity.cs" Link="Model\auto\WFOinsEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Model\auto\WFTinsEntity.cs" Link="Model\auto\WFTinsEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Model\auto\WTaskEntity.cs" Link="Model\auto\WTaskEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Model\ETaskType.cs" Link="Task\ETaskType.cs" />
+    <Compile Include="..\M.WorkFlow\Model\WFFlowEntity.cs" Link="Model\WFFlowEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Model\WTaskEntity.cs" Link="Model\WTaskEntity.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Model\auto\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FD.Component.DB" Version="1.1.8.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FD.Simple.DB\FD.Simple.DB.csproj" />
+  </ItemGroup>
+</Project>

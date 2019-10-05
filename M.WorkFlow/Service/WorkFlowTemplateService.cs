@@ -1,7 +1,6 @@
 ﻿using FD.Simple.DB;
 using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Provider;
-using M.WorkFlow.Engine;
 using M.WorkFlow.Model;
 using M.WorkFlow.Repository;
 using System.Linq;
@@ -12,9 +11,6 @@ namespace M.WorkFlow
     {
         [Autowired]
         public IWorkFlowTemplate WorkFlowTemplate { get; set; }
-
-        [Autowired]
-        public System.Collections.Generic.IEnumerable<IBaseTask> Tasks { get; set; }
 
 
         [Routing(EHttpMethod.HttpGet, "wft/getid")]

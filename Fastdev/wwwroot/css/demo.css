@@ -1,6 +1,6 @@
 .demo {
     /* for IE10+ touch devices */
-    touch-action:none;
+    touch-action: none;
 }
 
 .w {
@@ -23,11 +23,14 @@
     transition: background-color 0.25s ease-in;
 }
 
-.w:hover {
-    background-color: #5c96bc;
-    color: white;
+    .w .taskTitle {
+        margin-right: 5px;
+    }
 
-}
+    .w:hover {
+        background-color: #5c96bc;
+        color: white;
+    }
 
 .aLabel {
     -webkit-transition: background-color 0.25s ease-in;
@@ -35,10 +38,10 @@
     transition: background-color 0.25s ease-in;
 }
 
-.aLabel.jtk-hover, .jtk-source-hover, .jtk-target-hover {
-    background-color: #1e8151;
-    color: white;
-}
+    .aLabel.jtk-hover, .jtk-source-hover, .jtk-target-hover {
+        background-color: #1e8151;
+        color: white;
+    }
 
 .aLabel {
     background-color: white;
@@ -63,63 +66,54 @@
     transition: box-shadow 0.25s ease-in;
 }
 
-.ep:hover {
-    box-shadow: 0 0 6px black;
-}
+    .ep:hover {
+        box-shadow: 0 0 6px black;
+    }
 
 .statemachine-demo .jtk-endpoint {
     z-index: 3;
 }
 
-#opened {
-    left: 10em;
-    top: 5em;
-}
-
-#phone1 {
-    left: 35em;
-    top: 12em;
-    width: 7em;
-}
-
-#inperson {
-    left: 12em;
-    top: 23em;
-}
-
-#phone2 {
-    left: 28em;
-    top: 24em;
-}
-
-#rejected {
-    left: 10em;
-    top: 35em;
-}
 
 .dragHover {
     border: 2px solid orange;
 }
 
-path, .jtk-endpoint { cursor:pointer; }
+path, .jtk-endpoint {
+    cursor: pointer;
+}
 
 .wtype1 {
     background-color: #76c679;
     color: #fff;
 }
+
 .wtype2 {
     background-color: #e55052;
     color: #fff;
 }
+
 .wtype3 {
     background-color: #efa112;
     color: #fff;
 }
+
 .wtype4 {
     background-color: #e5c385;
     color: #fff;
 }
+
 .wtype5 {
     background-color: #8d1010;
+    color: #fff;
+}
+
+.wtype6 {
+    background-color: yellow;
+    color: black;
+}
+
+.wtype7 {
+    background-color: #1e8151;
     color: #fff;
 }

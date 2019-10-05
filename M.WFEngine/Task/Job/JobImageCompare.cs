@@ -6,13 +6,13 @@ using System.Text;
 namespace M.WorkFlow.Engine.Job
 {
     [Autowired]
-    public class JobImageCompare : IJob
+    public class JobDemo : IJob
     {
         public ETaskType TaskType => ETaskType.Work;
 
         public void Exe(string dataId)
         {
-            Console.WriteLine("图像比对开始");
+            Console.WriteLine("JobDemo开始");
         }
     }
 }

@@ -60,6 +60,7 @@ namespace M.WorkFlow.Repository
                     taskEntity.X = task.X;
                     taskEntity.Y = task.Y;
                     taskEntity.Type = task.Type;
+                    taskEntity.Name = task.Name;
                     DataAccess.Update(taskEntity);
                 }
                 foreach (var link in flowEntity?.Links ?? new List<WFLinkEntity>())

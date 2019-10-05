@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\M.WorkFlow\M.WorkFlow.csproj" />
+    <ProjectReference Include="..\M.WFEngine\M.WFEngine.csproj" />
   </ItemGroup>
 
 </Project>

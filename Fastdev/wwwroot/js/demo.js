@@ -1,7 +1,25 @@
 /// <reference path="../lib/axios.min.js" />
 
+var EDBEntityState =
+{
+    UnChanged: 0,
+    Added: 2,
+    Modified: 4,
+    Deleted: 8
+};
+var ETaskType = {
+    Start: 1,
+    End: 2,
+    Work: 3,
+    WorkAsync: 4,
+    BingXing: 5,
+    JuHe: 6,
+    Model: 7
+};
+
 axios.defaults.baseURL = 'http://localhost:5002';
 var flowId = "00001F493WJRC0000A00";
+
 
 jsPlumb.ready(function () {
     // setup some defaults for jsPlumb.
@@ -63,7 +81,7 @@ jsPlumb.ready(function () {
             var tmpDeleteLinks = [];
             $.each(instance.getAllConnections(), function (i, v) {
                 if (v.sourceId == taskId || v.targetId == taskId) {
-                    tmpDeleteLinks.push(v.id);
+                    tmpDeleteLinks.push(v.getData().id);
                 }
             });
             $.each(tmpDeleteLinks, function (i, v) {
@@ -71,7 +89,8 @@ jsPlumb.ready(function () {
             });
             //删除任务节点
             var $task = $("#" + taskId);
-            if ($task.data("State") == 0 || $task.data("State") == 2) {
+            var taskState = $task.data('data').state;
+            if (taskState == 0 || taskState == 4) {
                 jpdata.deleteTasks.push(taskId);
             }
             $task.remove();
@@ -199,7 +218,44 @@ jsPlumb.ready(function () {
             // version of this demo to find out about new nodes being added.
             //
             instance.fire("jsPlumbDemoNodeAdded", $task);
+
+
+            $.contextMenu({
+                selector: "#" + node.id,
+                zIndex: 10,
+                items: {
+                    "edit": {
+                        name: "修改名称", icon: "edit", callback: function (key, opt) {
+                            var $node = $(opt.$trigger);
+                            var $title = $(".taskTitle", $node);
+                            var result = window.prompt("请输入新的名称", $title.text());
+                            if (result != null) {
+                                $title.text(result);
+                                $node.data('data').name = result;
+                                $node.data('data').state = 4;
+                            }
+                        }
+                    },
+                    "delete": {
+                        name: "删除", icon: "delete", callback: function (key, opt) {
+                            if (window.confirm('确定要删除吗？')) {
+                                jpdata.deleteTask($(opt.$trigger).attr('id'));
+                            }
+                            return true;
+                        }
+                    }
+                }
+            });
+
             $task.bind("dblclick", function (e) {
+
+                var result = window.prompt("请输入新的名称", $(e.target).text());
+                if (result != null) {
+                    $(e.target).text(result);
+                    $(e.currentTarget).data('data').name = result;
+                    $(e.currentTarget).data('data').state = 4;
+                }
+                return;
                 alert('dbclick');
                 var id = e.target.id;
                 if (id == "") {
