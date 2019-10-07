@@ -18,10 +18,11 @@ namespace M.WorkFlow.Engine
 
         #endregion
 
-        public WFFinsEntity CreatFlowInstance(string flowId, string dataId)
+        public WFFinsEntity CreatFlowInstance(string serviceId, string flowId, string dataId)
         {
             WFFinsEntity fins = new WFFinsEntity();
             fins.Add();
+            fins.ServiceId = serviceId;
             fins.Flowid = flowId;
             fins.Dataid = dataId;
             fins.Name = dataId;
@@ -132,13 +133,22 @@ namespace M.WorkFlow.Engine
             return 1;
         }
 
-        public int Start(string flowId, string dataId)
+        WFServiceEntity GetServiceEntity(string id)
+        {
+            return _DataAccess.Query(WFServiceEntity.TableCode).FixField("*").Where(TableFilter.New().Equals("ID", id)).QueryFirst<WFServiceEntity>();
+        }
+
+        public int Start(string serviceId, string dataId)
         {
             var filter = TableFilter.New().Equals("status", 0);
-            var jobs = _DataAccess.Query(WFTEventEntity.TableCode).FixField("*").Paging(1, 10).Where(filter).QueryList<WFTEventEntity>();
 
-
-            var startTask = _WFTask.GetStartTask(flowId);
+            //根据业务id获取当前版本的id
+            var serviceEntity = GetServiceEntity(serviceId);
+            if (serviceEntity == null || string.IsNullOrWhiteSpace(serviceEntity.Currentflowid))
+            {
+                return 0;
+            }
+            var startTask = _WFTask.GetStartTask(serviceEntity.Currentflowid);
             if (startTask == null)
             {
                 throw new Exception("没有找到开始节点");
@@ -147,7 +157,7 @@ namespace M.WorkFlow.Engine
             using (var trans = TransHelper.BeginTrans())
             {
                 //1、创建流程实例、开始节点实例，执行开始节点任务
-                var fins = this.CreatFlowInstance(flowId, dataId);
+                var fins = this.CreatFlowInstance(serviceEntity.ID, serviceEntity.Currentflowid, dataId);
                 var tinsStart = _WFTask.CreateTaskIns(fins, startTask);
 
                 var nextTasks = _WFTask.GetNextTasks(startTask, tinsStart);

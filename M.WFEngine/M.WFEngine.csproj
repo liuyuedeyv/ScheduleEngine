@@ -9,6 +9,7 @@
     <Compile Include="..\M.WorkFlow\Model\auto\WFFlowEntity.cs" Link="Model\auto\WFFlowEntity.cs" />
     <Compile Include="..\M.WorkFlow\Model\auto\WFLinkEntity.cs" Link="Model\auto\WFLinkEntity.cs" />
     <Compile Include="..\M.WorkFlow\Model\auto\WFOinsEntity.cs" Link="Model\auto\WFOinsEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Model\auto\WFServiceEntity.cs" Link="Model\auto\WFServiceEntity.cs" />
     <Compile Include="..\M.WorkFlow\Model\auto\WFTEventEntity.cs" Link="Model\auto\WFTEventEntity.cs" />
     <Compile Include="..\M.WorkFlow\Model\auto\WFTinsEntity.cs" Link="Model\auto\WFTinsEntity.cs" />
     <Compile Include="..\M.WorkFlow\Model\auto\WTaskEntity.cs" Link="Model\auto\WTaskEntity.cs" />

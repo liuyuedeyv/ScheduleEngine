@@ -31,7 +31,7 @@ namespace M.WorkFlow.Repository
                 throw new Exception("没有找到流程业务");
             }
 
-            filter = TableFilter.New().Equals("serviceId", serviceId);
+            filter = TableFilter.New().Equals("serviceId", serviceId).Equals("istemplate", 1);
             var query = DataAccess.Query(WFFlowEntity.TableCode).FixField("*").Sort("version desc").Where(filter);
             var list = query.QueryList<WFFlowEntity>().ToList();
 

@@ -97,15 +97,15 @@ namespace M.WorkFlow.Model
             set { _Cmuser = value; OnPropertyChanged("Cmuser"); }
         }
 
-        private string _Workid;
+        private string _ServiceId;
         /// <summary>
         /// 业务模板ID
         /// </summary>
         [DataMember]
-        public string Workid
+        public string ServiceId
         {
-            get { return _Workid; }
-            set { _Workid = value; OnPropertyChanged("Workid"); }
+            get { return _ServiceId; }
+            set { _ServiceId = value; OnPropertyChanged("ServiceId"); }
         }
 
         private string _Monitor;

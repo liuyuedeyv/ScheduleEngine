@@ -32,7 +32,7 @@ namespace M.WorkFlow.Engine
         /// <param name="flowId"></param>
         /// <param name="dataId"></param>
         /// <returns></returns>
-        WFFinsEntity CreatFlowInstance(string flowId, string dataId);
+        WFFinsEntity CreatFlowInstance(string serviceId, string flowId, string dataId);
         /// <summary>
         /// 获取流程实例信息
         /// </summary>

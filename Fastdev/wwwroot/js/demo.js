@@ -18,9 +18,9 @@ var ETaskType = {
 };
 
 axios.defaults.baseURL = 'http://localhost:5002';
-axios.defaults.headers = {
-    'Content-type': 'application/x-www-form-urlencoded'
-};
+//axios.defaults.headers = {
+//    'Content-type': 'application/x-www-form-urlencoded'
+//};
 //var flowId = "00001F493WJRC0000A00";
 var serviceId = "00001PF1OUJQJ0000A01";
 lblServiceId.innerText = serviceId;

@@ -128,6 +128,7 @@ path, .jtk-endpoint {
 
     .flowlist ol input[type=button] {
         border: 0;
+        text-decoration: underline;
     }
 
     .flowlist li {

@@ -76,6 +76,30 @@ namespace M.WorkFlow.Model
             set { _Cuser = value; OnPropertyChanged("Cuser"); }
         }
 
+
+
+        private int _Istemplate;
+        /// <summary>
+        /// 是否是流程模板
+        /// </summary>
+        [DataMember]
+        public int Istemplate
+        {
+            get { return _Istemplate; }
+            set { _Istemplate = value; OnPropertyChanged("Istemplate"); }
+        }
+
+
+        private string _Baseflowid;
+        /// <summary>
+        /// 如果是运行中修改的流程，则此字段会存储原版本流程id
+        /// </summary>
+        [DataMember]
+        public string Baseflowid
+        {
+            get { return _Baseflowid; }
+            set { _Baseflowid = value; OnPropertyChanged("Baseflowid"); }
+        }
     }
 }//end
 

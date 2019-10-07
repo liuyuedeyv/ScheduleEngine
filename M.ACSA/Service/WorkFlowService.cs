@@ -14,19 +14,19 @@ namespace M.WorkFlow
         /// <summary>
         /// 启动流程
         /// </summary>
-        /// <param name="flowId"></param>
+        /// <param name="serviceId"></param>
         /// <param name="dataId"></param>
         /// <returns></returns>
         [Routing(EHttpMethod.HttpGet, "wft/start")]
-        public CommonResult<int> StartWF(string flowId, string dataId)
+        public CommonResult<int> StartWF(string serviceId, string dataId)
         {
-            if (string.IsNullOrWhiteSpace(flowId) || string.IsNullOrWhiteSpace(dataId))
+            if (string.IsNullOrWhiteSpace(serviceId) || string.IsNullOrWhiteSpace(dataId))
             {
                 return new WarnResult("dataId  and flowId is not null");
             }
 
 
-            return _WorkFlow.Start(flowId, dataId);
+            return _WorkFlow.Start(serviceId, dataId);
         }
         /// <summary>
         /// 异步任务回调方法
