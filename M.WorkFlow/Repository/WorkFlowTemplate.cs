@@ -4,6 +4,7 @@ using FD.Simple.Utils.Agent;
 using M.WorkFlow.Model;
 using System;
 using System.Collections.Generic;
+using FD.Simple.Utils.Provider;
 
 namespace M.WorkFlow.Repository
 {
@@ -60,11 +61,11 @@ namespace M.WorkFlow.Repository
             return flowEntity;
         }
 
-        public void ReleaseFlow(string flowId)
+        public CommonResult<int> ReleaseFlow(string flowId)
         {
             if (string.IsNullOrWhiteSpace(flowId))
             {
-                throw new ArgumentException($"{nameof(flowId)} is not null");
+                return new WarnResult($"{nameof(flowId)} is not null");
             }
             var flowEntity = DataAccess.Query(WFFlowEntity.TableCode).FixField("*").Where(TableFilter.New().Equals("Id", flowId)).QueryFirst<WFFlowEntity>();
 
@@ -74,14 +75,34 @@ namespace M.WorkFlow.Repository
                 flowEntity.ReleaseDate = DateTime.Now;
                 DataAccess.Update(flowEntity);
             }
+            return 1;
         }
 
-        public void SetCurrentFow(string flowId)
+        public CommonResult<int> SetCurrentFow(string serviceId, string flowId)
         {
             if (string.IsNullOrWhiteSpace(flowId))
             {
-                throw new ArgumentException($"{nameof(flowId)} is not null");
+                return new WarnResult($"{nameof(flowId)} is not null");
             }
+            var flowEntity = DataAccess.Query(WFFlowEntity.TableCode).FixField("*").Where(TableFilter.New().Equals("Id", flowId)).QueryFirst<WFFlowEntity>();
+
+            if (flowEntity == null || flowEntity.Released == 0)
+            {
+                return new WarnResult("必须发布后的流程才能设置为当前");
+            }
+            var serviceEntity = DataAccess.Query(WFServiceEntity.TableCode).FixField("*").Where(TableFilter.New().Equals("Id", serviceId)).QueryFirst<WFServiceEntity>();
+
+            if (serviceEntity == null)
+            {
+                return new WarnResult("没有找到业务流程");
+            }
+
+            if (serviceEntity.Currentflowid != flowId)
+            {
+                serviceEntity.Currentflowid = flowId;
+                DataAccess.Update(serviceEntity);
+            }
+            return 1;
         }
 
         public int UpdateTemplate(WFFlowEntity flowEntity)

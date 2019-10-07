@@ -1,4 +1,5 @@
-﻿using M.WorkFlow.Model;
+﻿using FD.Simple.Utils.Provider;
+using M.WorkFlow.Model;
 using System.Collections.Generic;
 
 namespace M.WorkFlow.Repository
@@ -27,12 +28,12 @@ namespace M.WorkFlow.Repository
         /// 发布流程
         /// </summary>
         /// <param name="flowId"></param>
-        void ReleaseFlow(string flowId);
+        CommonResult<int> ReleaseFlow(string flowId);
 
         /// <summary>
         /// 设置当前流程 
         /// </summary>
         /// <param name="flowId"></param>
-        void SetCurrentFow(string flowId);
+        CommonResult<int> SetCurrentFow(string serviceId, string flowId);
     }
 }

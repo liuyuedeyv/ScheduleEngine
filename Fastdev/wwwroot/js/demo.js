@@ -18,6 +18,9 @@ var ETaskType = {
 };
 
 axios.defaults.baseURL = 'http://localhost:5002';
+axios.defaults.headers = {
+    'Content-type': 'application/x-www-form-urlencoded'
+};
 //var flowId = "00001F493WJRC0000A00";
 var serviceId = "00001PF1OUJQJ0000A01";
 lblServiceId.innerText = serviceId;
@@ -468,5 +471,25 @@ $("#btnAddNode").click(function () {
             type: 3,
             state: 2
         });
+    });
+});
+
+
+$("#btnRelease").click(function () {
+    var data = {
+        flowId: $("#flowlist>.select input").attr('flowid')
+    };
+    var selectFlowid = $("#flowlist>.select input").attr('flowid');
+    axios.post("/wft/releaseflow", 'flowId=' + data.flowId).then(function (res) {
+        window.location.href = window.location.href;
+    });
+});
+$("#btnSetCurrent").click(function () {
+    var data = {
+        flowId: $("#flowlist>.select input").attr('flowid'),
+        serviceId: serviceId
+    };
+    axios.post("/wft/setCurrent", 'serviceId=' + data.serviceId + '&flowId=' + data.flowId).then(function (res) {
+        window.location.href = window.location.href;
     });
 });

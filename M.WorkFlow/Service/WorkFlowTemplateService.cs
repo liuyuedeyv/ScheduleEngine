@@ -3,6 +3,7 @@ using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Provider;
 using M.WorkFlow.Model;
 using M.WorkFlow.Repository;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -49,7 +50,7 @@ namespace M.WorkFlow
 
 
         [Routing(EHttpMethod.HttpPost, "wft/releaseflow")]
-        public int ReleaseFlow(string id)
+        public CommonResult<int> ReleaseFlow(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
@@ -57,8 +58,20 @@ namespace M.WorkFlow
             }
             else
             {
-                this.WorkFlowTemplate.ReleaseFlow(id);
-                return 1;
+                return this.WorkFlowTemplate.ReleaseFlow(id);
+            }
+        }
+
+        [Routing(EHttpMethod.HttpPost, "wft/setCurrent")]
+        public CommonResult<int> SetCurrentFlow(string serviceId, string flowId)
+        {
+            if (string.IsNullOrWhiteSpace(serviceId) || string.IsNullOrWhiteSpace(flowId))
+            {
+                return 0;
+            }
+            else
+            {
+                return this.WorkFlowTemplate.SetCurrentFow(serviceId, flowId);
             }
         }
 
