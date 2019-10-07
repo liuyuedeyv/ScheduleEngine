@@ -3,6 +3,7 @@ using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Provider;
 using M.WorkFlow.Model;
 using M.WorkFlow.Repository;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace M.WorkFlow
@@ -19,6 +20,18 @@ namespace M.WorkFlow
             return FD.Simple.Utils.DataKeyFactory.NewId();
         }
 
+        [Routing(EHttpMethod.HttpGet, "wft/getallflows")]
+        public CommonResult<List<WFFlowEntity>> GetFlowsByServiceIdo(string serviceId)
+        {
+            if (string.IsNullOrWhiteSpace(serviceId))
+            {
+                return new WarnResult("serviceId is not null");
+            }
+            else
+            {
+                return this.WorkFlowTemplate.GetFlowsByServiceId(serviceId);
+            }
+        }
 
         [Routing(EHttpMethod.HttpGet, "wft/getflowinfo")]
         public WFFlowEntity GetFlowInfo(string id)
@@ -31,6 +44,21 @@ namespace M.WorkFlow
             else
             {
                 return this.WorkFlowTemplate.GetWFTemplate(id);
+            }
+        }
+
+
+        [Routing(EHttpMethod.HttpPost, "wft/releaseflow")]
+        public int ReleaseFlow(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return 0;
+            }
+            else
+            {
+                this.WorkFlowTemplate.ReleaseFlow(id);
+                return 1;
             }
         }
 
@@ -50,7 +78,7 @@ namespace M.WorkFlow
         [Routing(EHttpMethod.HttpGet, "wft/task")]
         public CommonResult<int> Task()
         {
-            
+
 
             return 1;
         }

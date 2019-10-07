@@ -117,3 +117,27 @@ path, .jtk-endpoint {
     background-color: #1e8151;
     color: #fff;
 }
+
+
+.flowlist {
+    position: absolute;
+    margin-left: -200px;
+    width: 200px;
+    background-color: gainsboro;
+}
+
+    .flowlist ol input[type=button] {
+        border: 0;
+    }
+
+    .flowlist li {
+        margin-top: 5px;
+    }
+
+    .flowlist .select {
+        background-color: red;
+    }
+
+        .flowlist .select input[type=button] {
+            background-color: red;
+        }

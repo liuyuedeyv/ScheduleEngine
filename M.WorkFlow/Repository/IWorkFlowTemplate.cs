@@ -18,10 +18,21 @@ namespace M.WorkFlow.Repository
         /// <returns></returns>
         WFFlowEntity GetWFTemplate(string flowId);
         /// <summary>
-        /// 根据业务模板id获取流程信息
+        /// 根据流程服务id获取各个版本流程信息
         /// </summary>
-        /// <param name="bisId"></param>
+        /// <param name="serviceId"></param>
         /// <returns></returns>
-        List<WFFlowEntity> GetFlowsByBisTemplate(string bisId);
+        List<WFFlowEntity> GetFlowsByServiceId(string serviceId);
+        /// <summary>
+        /// 发布流程
+        /// </summary>
+        /// <param name="flowId"></param>
+        void ReleaseFlow(string flowId);
+
+        /// <summary>
+        /// 设置当前流程 
+        /// </summary>
+        /// <param name="flowId"></param>
+        void SetCurrentFow(string flowId);
     }
 }

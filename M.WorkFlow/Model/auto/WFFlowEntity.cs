@@ -9,59 +9,49 @@ namespace M.WorkFlow.Model
         public const string TableCode = "WFFLOW";
         public override string _TableCode { get { return TableCode; } }
 
-        private int _Orderid;
+        private int _Version;
         /// <summary>
-        /// 排序id
+        /// 
         /// </summary>
         [DataMember]
-        public int Orderid
+        public int Version
         {
-            get { return _Orderid; }
-            set { _Orderid = value; OnPropertyChanged("Orderid"); }
+            get { return _Version; }
+            set { _Version = value; OnPropertyChanged("Version"); }
         }
 
-        private string _Name;
+
+        private int _Released;
         /// <summary>
-        /// 名称
+        /// 
         /// </summary>
         [DataMember]
-        public string Name
+        public int Released
         {
-            get { return _Name; }
-            set { _Name = value; OnPropertyChanged("Name"); }
+            get { return _Released; }
+            set { _Released = value; OnPropertyChanged("Released"); }
         }
 
-        private string _Filter;
+        private DateTime _ReleaseDate;
         /// <summary>
-        /// filter
+        /// 发布时间
         /// </summary>
         [DataMember]
-        public string Filter
+        public DateTime ReleaseDate
         {
-            get { return _Filter; }
-            set { _Filter = value; OnPropertyChanged("Filter"); }
+            get { return _ReleaseDate; }
+            set { _ReleaseDate = value; OnPropertyChanged("ReleaseDate"); }
         }
 
-        private string _Xml;
+        private string _ServiceId;
         /// <summary>
-        /// 流程数据
+        /// 业务ID
         /// </summary>
         [DataMember]
-        public string Xml
+        public string ServiceId
         {
-            get { return _Xml; }
-            set { _Xml = value; OnPropertyChanged("Xml"); }
-        }
-
-        private string _Workid;
-        /// <summary>
-        /// 工作流业务ID
-        /// </summary>
-        [DataMember]
-        public string Workid
-        {
-            get { return _Workid; }
-            set { _Workid = value; OnPropertyChanged("Workid"); }
+            get { return _ServiceId; }
+            set { _ServiceId = value; OnPropertyChanged("ServiceId"); }
         }
 
         private DateTime _Cdate;

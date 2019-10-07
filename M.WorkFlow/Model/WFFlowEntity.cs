@@ -18,5 +18,11 @@ namespace M.WorkFlow.Model
         /// </summary>
         [DataMember]
         public List<WFTaskEntity> Tasks { get; set; }
+
+        /// <summary>
+        /// 当前流程
+        /// </summary>
+        [DataMember]
+        public int CurrentTag { get; set; }
     }
 }

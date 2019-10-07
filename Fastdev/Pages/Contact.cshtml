@@ -12,31 +12,42 @@
 <div data-demo-id="statemachine">
     <div style="position: absolute;margin-top: -30px;">
         <input type="button" value="保存" id="btnGetJson">
-        <input type="button" value="新增" id="btnAddNode">
+        <input type="button" value="新增节点" id="btnAddNode">
     </div>
     <div class="jtk-demo-main">
+        <div class="flowlist">
+            <input type="button" value="添加" id="btnGetJson">
+            <input type="button" value="发布" id="btnGetJson">
+            <input type="button" value="设为当前" id="btnAddNode">
+            <br />
+            流程服务ID：
+            <label id="lblServiceId"></label>
+            <br />
+            版本明细：
+            <ol id="flowlist"></ol>
+        </div>
         <!-- demo -->
         <div class="jtk-demo-canvas canvas-wide statemachine-demo jtk-surface jtk-surface-nopan" id="canvas">
             @*<div class="w" id="opened">
-                BEGIN
-                <div class="ep" action="begin"></div>
-            </div>
-            <div class="w" id="phone1">
-                PHONE INTERVIEW 1
-                <div class="ep" action="phone1"></div>
-            </div>
-            <div class="w" id="phone2">
-                PHONE INTERVIEW 2
-                <div class="ep" action="phone2"></div>
-            </div>
-            <div class="w" id="inperson">
-                IN PERSON
-                <div class="ep" action="inperson"></div>
-            </div>
-            <div class="w" id="rejected">
-                REJECTED
-                <div class="ep" action="rejected"></div>
-            </div>*@
+                    BEGIN
+                    <div class="ep" action="begin"></div>
+                </div>
+                <div class="w" id="phone1">
+                    PHONE INTERVIEW 1
+                    <div class="ep" action="phone1"></div>
+                </div>
+                <div class="w" id="phone2">
+                    PHONE INTERVIEW 2
+                    <div class="ep" action="phone2"></div>
+                </div>
+                <div class="w" id="inperson">
+                    IN PERSON
+                    <div class="ep" action="inperson"></div>
+                </div>
+                <div class="w" id="rejected">
+                    REJECTED
+                    <div class="ep" action="rejected"></div>
+                </div>*@
         </div>
         <!-- /demo -->
     </div>

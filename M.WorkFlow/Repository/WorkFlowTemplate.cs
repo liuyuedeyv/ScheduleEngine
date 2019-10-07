@@ -16,9 +16,30 @@ namespace M.WorkFlow.Repository
         [Autowired]
         public IDBContext DBContext { get; set; }
 
-        public List<WFFlowEntity> GetFlowsByBisTemplate(string bisId)
+        public List<WFFlowEntity> GetFlowsByServiceId(string serviceId)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(serviceId))
+            {
+                throw new ArgumentException($"{nameof(serviceId)} is not null");
+            }
+
+            var filter = TableFilter.New().Equals("id", serviceId);
+            var serviceEntity = DataAccess.Query(WFServiceEntity.TableCode).FixField("*").Where(filter).QueryFirst<WFServiceEntity>();
+            if (serviceEntity == null)
+            {
+                throw new Exception("没有找到流程业务");
+            }
+
+            filter = TableFilter.New().Equals("serviceId", serviceId);
+            var query = DataAccess.Query(WFFlowEntity.TableCode).FixField("*").Sort("version desc").Where(filter);
+            var list = query.QueryList<WFFlowEntity>().ToList();
+
+            var currentFlow = list.Where(flow => flow.ID == serviceEntity.Currentflowid).FirstOrDefault();
+            if (currentFlow != null)
+            {
+                currentFlow.CurrentTag = 1;
+            }
+            return list;
         }
 
         public WFFlowEntity GetWFTemplate(string flowId)
@@ -28,7 +49,7 @@ namespace M.WorkFlow.Repository
                 throw new ArgumentException($"{nameof(flowId)} is not null");
             }
             var filter = TableFilter.New().Equals("id", flowId);
-            var query = DataAccess.Query(WFFlowEntity.TableCode).FixField("id,name").Where(filter);
+            var query = DataAccess.Query(WFFlowEntity.TableCode).FixField("id").Where(filter);
             var flowEntity = query.QueryFirst<WFFlowEntity>();
             if (flowEntity != null)
             {
@@ -37,6 +58,30 @@ namespace M.WorkFlow.Repository
                 flowEntity.Tasks = DataAccess.Query(WFTaskEntity.TableCode).FixField("id,name,type,x,y").Where(filter).QueryList<WFTaskEntity>().ToList();
             }
             return flowEntity;
+        }
+
+        public void ReleaseFlow(string flowId)
+        {
+            if (string.IsNullOrWhiteSpace(flowId))
+            {
+                throw new ArgumentException($"{nameof(flowId)} is not null");
+            }
+            var flowEntity = DataAccess.Query(WFFlowEntity.TableCode).FixField("*").Where(TableFilter.New().Equals("Id", flowId)).QueryFirst<WFFlowEntity>();
+
+            if (flowEntity != null && flowEntity.Released == 0)
+            {
+                flowEntity.Released = 1;
+                flowEntity.ReleaseDate = DateTime.Now;
+                DataAccess.Update(flowEntity);
+            }
+        }
+
+        public void SetCurrentFow(string flowId)
+        {
+            if (string.IsNullOrWhiteSpace(flowId))
+            {
+                throw new ArgumentException($"{nameof(flowId)} is not null");
+            }
         }
 
         public int UpdateTemplate(WFFlowEntity flowEntity)
