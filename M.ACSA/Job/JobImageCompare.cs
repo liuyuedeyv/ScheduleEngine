@@ -1,9 +1,9 @@
 ﻿using FD.Simple.Utils.Agent;
+using M.WorkFlow.Engine;
+using M.WorkFlow.Engine.Job;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace M.WorkFlow.Engine.Job
+namespace M.ACSA.Job
 {
     [Autowired]
     public class JobImageCompare : IJob

@@ -15,12 +15,6 @@ namespace M.WorkFlow.Engine
         /// <returns></returns>
         int Start(string flowId, string dataId);
         /// <summary>
-        /// 执行任务
-        /// </summary>
-        /// <param name="mqEntity"></param>
-        /// <returns></returns>
-        int Run(WFTEventEntity mqEntity);
-        /// <summary>
         /// 执行任务的回调
         /// </summary>
         /// <param name="mqId"></param>
@@ -39,5 +33,11 @@ namespace M.WorkFlow.Engine
         /// <param name="finsId"></param>
         /// <returns></returns>
         WFFinsEntity GetFlowInstance(string finsId);
+        /// <summary>
+        /// 处理后台任务事件
+        /// </summary>
+        /// <param name="batchCount">批次预期数量</param>
+        /// <returns>实际取到可执行任务数量</returns>
+        int ProcessWftEvent(uint batchCount);
     }
 }

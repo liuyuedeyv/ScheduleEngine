@@ -3,6 +3,7 @@ using FD.Simple.Utils.Agent;
 using M.WorkFlow.Model;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace M.WorkFlow.Engine
 {
@@ -89,7 +90,65 @@ namespace M.WorkFlow.Engine
             return 1;
         }
 
-        public int Run(WFTEventEntity mqEntity)
+        private WFServiceEntity GetServiceEntity(string id)
+        {
+            return _DataAccess.Query(WFServiceEntity.TableCode).FixField("*").Where(TableFilter.New().Equals("ID", id)).QueryFirst<WFServiceEntity>();
+        }
+
+        public int Start(string serviceId, string dataId)
+        {
+            var filter = TableFilter.New().Equals("status", 0);
+
+            //根据业务id获取当前版本的id
+            var serviceEntity = GetServiceEntity(serviceId);
+            if (serviceEntity == null || string.IsNullOrWhiteSpace(serviceEntity.Currentflowid))
+            {
+                return 0;
+            }
+            var startTask = _WFTask.GetStartTask(serviceEntity.Currentflowid);
+            if (startTask == null)
+            {
+                throw new Exception("没有找到开始节点");
+            }
+
+            using (var trans = TransHelper.BeginTrans())
+            {
+                //1、创建流程实例、开始节点实例，执行开始节点任务
+                var fins = this.CreatFlowInstance(serviceEntity.ID, serviceEntity.Currentflowid, dataId);
+                var tinsStart = _WFTask.CreateTaskIns(fins, startTask);
+
+                var nextTasks = _WFTask.GetNextTasks(startTask, tinsStart);
+                if (nextTasks == null || nextTasks.Length != 1)
+                {
+                    throw new Exception("没有找到唯一的下一个任务节点");
+                }
+                var nextTask = nextTasks[0];
+                _WFTask.GetTaskInfo(startTask).RunTask(fins, tinsStart, null);
+
+                //2、获取下一个任务节点，并且创建待执行任务
+                var tinsNext = _WFTask.CreateTaskIns(fins, nextTask);
+                _WFTask.GetTaskInfo(nextTask).CreateJob(fins, tinsNext, nextTask.Type == ETaskType.WorkAsync);
+                trans.Commit();
+            }
+            return 1;
+        }
+
+        public int ProcessWftEvent(uint batchCount)
+        {
+            var filter = TableFilter.New().Equals("status", 0);//.Equals("waitcallback", 0);
+            var jobs = _DataAccess.Query(WFTEventEntity.TableCode).FixField("*").Paging(1, batchCount).Where(filter).QueryList<WFTEventEntity>();
+
+            Parallel.ForEach<WFTEventEntity>(jobs,
+                new ParallelOptions()
+                {
+                    MaxDegreeOfParallelism = Environment.ProcessorCount
+                }, (job) =>
+                {
+                    Run(job);
+                });
+            return jobs.Count();
+        }
+        private int Run(WFTEventEntity mqEntity)
         {
             var taskEntity = _WFTask.GetTaskById(mqEntity.Taskid);
             var taskSetting = _WFTask.GetTaskInfo(taskEntity);
@@ -129,49 +188,6 @@ namespace M.WorkFlow.Engine
                     }
                 }
                 tran.Commit();
-            }
-            return 1;
-        }
-
-        WFServiceEntity GetServiceEntity(string id)
-        {
-            return _DataAccess.Query(WFServiceEntity.TableCode).FixField("*").Where(TableFilter.New().Equals("ID", id)).QueryFirst<WFServiceEntity>();
-        }
-
-        public int Start(string serviceId, string dataId)
-        {
-            var filter = TableFilter.New().Equals("status", 0);
-
-            //根据业务id获取当前版本的id
-            var serviceEntity = GetServiceEntity(serviceId);
-            if (serviceEntity == null || string.IsNullOrWhiteSpace(serviceEntity.Currentflowid))
-            {
-                return 0;
-            }
-            var startTask = _WFTask.GetStartTask(serviceEntity.Currentflowid);
-            if (startTask == null)
-            {
-                throw new Exception("没有找到开始节点");
-            }
-
-            using (var trans = TransHelper.BeginTrans())
-            {
-                //1、创建流程实例、开始节点实例，执行开始节点任务
-                var fins = this.CreatFlowInstance(serviceEntity.ID, serviceEntity.Currentflowid, dataId);
-                var tinsStart = _WFTask.CreateTaskIns(fins, startTask);
-
-                var nextTasks = _WFTask.GetNextTasks(startTask, tinsStart);
-                if (nextTasks == null || nextTasks.Length != 1)
-                {
-                    throw new Exception("没有找到唯一的下一个任务节点");
-                }
-                var nextTask = nextTasks[0];
-                _WFTask.GetTaskInfo(startTask).RunTask(fins, tinsStart, null);
-
-                //2、获取下一个任务节点，并且创建待执行任务
-                var tinsNext = _WFTask.CreateTaskIns(fins, nextTask);
-                _WFTask.GetTaskInfo(nextTask).CreateJob(fins, tinsNext, nextTask.Type == ETaskType.WorkAsync);
-                trans.Commit();
             }
             return 1;
         }

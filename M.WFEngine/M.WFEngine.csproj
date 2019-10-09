@@ -24,9 +24,6 @@
 
   <ItemGroup>
     <PackageReference Include="FD.Component.DB" Version="1.1.8.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.0" />
-    <PackageReference Include="WebApiClient.JIT" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>

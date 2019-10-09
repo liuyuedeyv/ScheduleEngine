@@ -1,12 +1,10 @@
-﻿using FD.Simple.DB;
-using FD.Simple.Utils.Agent;
+﻿using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Provider;
 using M.WorkFlow.Engine;
-using System.Linq;
 
-namespace M.WorkFlow
+namespace M.WFEngine.Service
 {
-    public class WorkFlowService : BaseFoo
+    public abstract class WorkFlowService : BaseFoo
     {
         [Autowired]
         public IWorkFlow _WorkFlow { get; set; }
@@ -18,7 +16,7 @@ namespace M.WorkFlow
         /// <param name="dataId"></param>
         /// <returns></returns>
         [Routing(EHttpMethod.HttpGet, "wft/start")]
-        public CommonResult<int> StartWF(string serviceId, string dataId)
+        public virtual CommonResult<int> StartWF(string serviceId, string dataId)
         {
             if (string.IsNullOrWhiteSpace(serviceId) || string.IsNullOrWhiteSpace(dataId))
             {
@@ -36,7 +34,7 @@ namespace M.WorkFlow
         /// <returns></returns>
 
         [Routing(EHttpMethod.HttpGet, "wft/callback")]
-        public CommonResult<int> CallbackWF(string mqId)
+        public virtual CommonResult<int> CallbackWF(string mqId)
         {
             if (string.IsNullOrWhiteSpace(mqId))
             {
@@ -45,5 +43,8 @@ namespace M.WorkFlow
 
             return _WorkFlow.Callback(mqId);
         }
+
+        [Routing(EHttpMethod.HttpGet, "wft/appname")]
+        public abstract string GetAppName(string mqId);
     }
 }
