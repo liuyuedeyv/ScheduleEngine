@@ -1,9 +1,7 @@
 ﻿using FD.Simple.DB;
-using M.WFEngine.Task;
-using M.WorkFlow.Engine;
 using M.WorkFlow.Model;
 
-namespace M.WorkFlow.Engine.Task
+namespace M.WFEngine.Task
 {
     public abstract class BaseTask : IBaseTask
     {

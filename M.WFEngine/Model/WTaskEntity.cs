@@ -1,5 +1,6 @@
 ﻿using FD.Simple.DB;
 using FD.Simple.Utils.Agent;
+using M.WFEngine.Task;
 using System.Runtime.Serialization;
 
 namespace M.WorkFlow.Model

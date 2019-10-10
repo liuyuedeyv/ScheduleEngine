@@ -1,4 +1,4 @@
-﻿namespace M.WorkFlow.Engine
+﻿namespace M.WorkFlow.Model
 {
     public enum ETaskType
     {

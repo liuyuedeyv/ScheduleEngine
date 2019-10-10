@@ -2,7 +2,7 @@
 using M.WorkFlow.Model;
 using System.Collections.Generic;
 
-namespace M.WorkFlow.Repository
+namespace M.WFDesigner.Repository
 {
     public interface IWorkFlowTemplate
     {

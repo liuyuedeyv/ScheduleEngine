@@ -1,7 +1,7 @@
 ﻿using FD.Simple.Utils;
 using System.Collections.Generic;
 
-namespace M.WFEngine.Model
+namespace M.WorkFlow.Model
 {
     public class WFJsonDataEntity : Dictionary<string, object>
     {

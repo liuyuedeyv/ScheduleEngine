@@ -1,10 +1,7 @@
-﻿using M.WorkFlow.Engine.Task;
-using M.WorkFlow.Model;
-using System;
+﻿using M.WorkFlow.Model;
 using System.Collections.Generic;
-using System.Text;
 
-namespace M.WorkFlow.Engine
+namespace M.WFEngine.Task
 {
     public interface IWFTask
     {

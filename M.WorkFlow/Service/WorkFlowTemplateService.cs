@@ -1,13 +1,10 @@
-﻿using FD.Simple.DB;
-using FD.Simple.Utils.Agent;
+﻿using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Provider;
+using M.WFDesigner.Repository;
 using M.WorkFlow.Model;
-using M.WorkFlow.Repository;
-using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace M.WorkFlow
+namespace M.WFDesigner.Service
 {
     public class WorkFlowTemplateService : BaseFoo
     {
