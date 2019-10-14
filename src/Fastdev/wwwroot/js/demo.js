@@ -17,7 +17,7 @@ var ETaskType = {
     Model: 7
 };
 
-axios.defaults.baseURL = document.location.href.replace('5000', '5002');
+axios.defaults.baseURL = document.location.origin.replace('5000', '5002');
 //axios.defaults.headers = {
 //    'Content-type': 'application/x-www-form-urlencoded'
 //};

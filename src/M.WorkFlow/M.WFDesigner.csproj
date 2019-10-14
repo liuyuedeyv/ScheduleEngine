@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>E:\shishuai.tfs\fastdev\apiloader\Module\</OutputPath>
+    <OutputPath></OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FD.Component.DB" Version="1.1.8.1" />
+    <PackageReference Include="FD.Component.DB" Version="1.1.8.5" />
   </ItemGroup>
 
 </Project>
