@@ -30,19 +30,16 @@ namespace M.WFEngine.Task
             var tins = taskSetting.Init(fins, taskEntity);
             return tins;
         }
-        public WFTaskEntity[] GetNextTasks(WFTaskEntity preTask, WFTinsEntity tinsEntity)
+        public WFTaskEntity[] GetNextTasks(WFTaskEntity preTask, WFTinsEntity tinsEntity, string bisJsonData)
         {
             var filter = TableFilter.New().Equals("BEGINTASKID", preTask.ID);
             var links = DataAccess.Query(WFLinkEntity.TableCode)
                  .FixField("*").Where(filter).QueryList<WFLinkEntity>().ToList();
 
-            //1、决策节点需要获取返回数据进行选择
-            if (preTask.Type == ETaskType.Model && links.Count() > 1)
+            if (preTask.Type != ETaskType.BingXing && links.Count() > 1)
             {
-                filter = TableFilter.New().Equals("TINSID", tinsEntity.ID);
-                var jsonData = DataAccess.Query(WFTDataEntity.TableCode).FixField("JSONDATA").Where(filter).QueryScalar().ConvertTostring();
                 var dataList = new List<WFJsonDataEntity>();
-                dataList.Add(_JsonConverter.Deserialize<WFJsonDataEntity>(jsonData));
+                dataList.Add(_JsonConverter.Deserialize<WFJsonDataEntity>(bisJsonData));
                 foreach (var link in links.OrderByDescending(l => l.Priority))
                 {
                     bool hitRule = false;
@@ -63,10 +60,7 @@ namespace M.WFEngine.Task
                     }
                 }
             }
-            else if (preTask.Type != ETaskType.BingXing && links.Count() > 1)
-            {
-                //TODO:判断如果并行节点返回多个后续节点，如果是普通节点则返回一个
-            }
+
             if (links.Count() == 1)
             {
                 filter = TableFilter.New().Equals("ID", string.Join(',', links.Select(l => l.Endtaskid).ToArray()));
@@ -119,6 +113,14 @@ namespace M.WFEngine.Task
             return taskInfo;
         }
 
+        public WFTaskSettingEntity GetTaskJobInfo(WFTaskEntity taskEntity)
+        {
+            var filter = TableFilter.New().Equals("id", taskEntity.ID);
+            var settingEntity = DataAccess.Query(WFTaskSettingEntity.TableCode)
+                .FixField("*").Where(filter).QueryFirst<WFTaskSettingEntity>();
+            return settingEntity;
+        }
+
         public WFTinsEntity GetTinsById(string tinsId)
         {
             var filter = TableFilter.New().Equals("id", tinsId);
@@ -133,6 +135,14 @@ namespace M.WFEngine.Task
             var tinsEntitys = DataAccess.Query(WFTinsEntity.TableCode)
                 .FixField("*").Where(filter).QueryList<WFTinsEntity>();
             return tinsEntitys;
+        }
+
+        public bool IsMultipleNextTask(WFTaskEntity preTask)
+        {
+            var filter = TableFilter.New().Equals("BEGINTASKID", preTask.ID);
+            var links = DataAccess.Query(WFLinkEntity.TableCode)
+                 .FixField("*").Where(filter).QueryList<WFLinkEntity>().ToList();
+            return links.Count > 1;
         }
     }
 }

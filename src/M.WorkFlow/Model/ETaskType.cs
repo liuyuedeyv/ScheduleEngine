@@ -15,9 +15,9 @@
         /// </summary>
         Work = 3,
         /// <summary>
-        /// 异步任务节点
+        /// 异步任务发起http请求
         /// </summary>
-        WorkAsync = 4,
+        WorkAsyncSendHttp = 4,
         /// <summary>
         /// 并行节点
         /// </summary>
@@ -29,6 +29,10 @@
         /// <summary>
         /// 决策节点
         /// </summary>
-        Model = 7
+        Model = 7,
+        /// <summary>
+        /// 异步任务发送MQ
+        /// </summary>
+        WorkAsyncSendMQ = 8
     }
 }

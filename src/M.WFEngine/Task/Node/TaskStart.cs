@@ -1,5 +1,7 @@
 ﻿using FD.Simple.DB;
 using FD.Simple.Utils.Agent;
+using FD.Simple.Utils.Serialize;
+using M.WFEngine.Task.Job;
 using M.WorkFlow.Model;
 using System;
 using System.Collections.Generic;
@@ -13,12 +15,9 @@ namespace M.WFEngine.Task
         [Autowired]
         public override DataAccess _DataAccess { get; set; }
         public override ETaskType TaskType => ETaskType.Start;
-        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFTEventEntity mqEntity)
-        {
-            //开始节点不需要执行具体任务           
-            Console.WriteLine($"开始节点{tinsEntity.Taskname}开始执行……");
-
-            return true;
-        }
+        [Autowired]
+        public override IJsonConverter _JsonConverter { get; set; }
+        [Autowired]
+        public override IWorkflowJobs _WFJobs { get; set; }
     }
 }

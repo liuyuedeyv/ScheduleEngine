@@ -1,10 +1,17 @@
 ﻿using FD.Simple.DB;
+using FD.Simple.Utils;
 using FD.Simple.Utils.Agent;
+using FD.Simple.Utils.Serialize;
+using M.WFEngine.Service;
 using M.WFEngine.Task;
 using M.WorkFlow.Model;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
+using WebApiClient;
 
 namespace M.WFEngine.Flow
 {
@@ -20,6 +27,9 @@ namespace M.WFEngine.Flow
 
         [Autowired]
         public IWorkFlowIns _WorkFlowIns { get; set; }
+
+        [Autowired]
+        public IJsonConverter _JsonConverter { get; set; }
         #endregion
 
         #region Start
@@ -38,28 +48,42 @@ namespace M.WFEngine.Flow
             {
                 throw new Exception("没有找到开始节点");
             }
-
+            //判断是否
+            var bisJsonData = GetBisData(startTask, dataId, serviceId, string.Empty);
             using (var trans = TransHelper.BeginTrans())
             {
                 //1、创建流程实例、开始节点实例，执行开始节点任务
                 var fins = _WorkFlowIns.CreatFlowInstance(serviceEntity.ID, serviceEntity.Currentflowid, dataId);
                 var tinsStart = _WFTask.CreateTaskIns(fins, startTask);
+                var startTaskSetting = _WFTask.GetTaskInfo(startTask);
+                startTaskSetting.RunTask(startTask, fins, tinsStart, null);
 
-                var nextTasks = _WFTask.GetNextTasks(startTask, tinsStart);
+
+                var nextTasks = _WFTask.GetNextTasks(startTask, tinsStart, bisJsonData);
                 if (nextTasks == null || nextTasks.Length != 1)
                 {
                     throw new Exception("没有找到唯一的下一个任务节点");
                 }
-                var nextTask = nextTasks[0];
-                _WFTask.GetTaskInfo(startTask).RunTask(fins, tinsStart, null);
+                //如果找到多个下个任务节点，则需要获取业务数据
 
-                //2、获取下一个任务节点，并且创建待执行任务
+                var nextTask = nextTasks[0];
                 var tinsNext = _WFTask.CreateTaskIns(fins, nextTask);
-                _WFTask.GetTaskInfo(nextTask).CreateJob(fins, tinsNext, nextTask.Type == ETaskType.WorkAsync);
+                _WFTask.GetTaskInfo(nextTask).CreateJob(fins, tinsNext, nextTask.Type == ETaskType.WorkAsyncSendHttp);
                 trans.Commit();
             }
             return 1;
         }
+
+        private string GetBisData(WFTaskEntity taskEntity, string dataId, string serviceId, string tinsId)
+        {
+            string jsonData = string.Empty;
+            if (_WFTask.IsMultipleNextTask(taskEntity))
+            {
+                jsonData = _WFTask.GetTaskInfo(taskEntity).GetBisData(taskEntity, dataId, serviceId);
+            }
+            return jsonData;
+        }
+
         #endregion
 
         #region ProcessWftEvent
@@ -84,10 +108,11 @@ namespace M.WFEngine.Flow
             var taskSetting = _WFTask.GetTaskInfo(taskEntity);
             var tinsEntity = _WFTask.GetTinsById(eventEntity.Tinsid);
             var fins = _WorkFlowIns.GetFlowInstance(eventEntity.Finsid);
+            var bisJsonData = GetBisData(taskEntity, eventEntity.Dataid, "", eventEntity.Tinsid);
             using (var tran = TransHelper.BeginTrans())
             {
                 //1、执行具体任务，并更新信息
-                var continueRun = taskSetting.RunTask(fins, tinsEntity, eventEntity);
+                var continueRun = taskSetting.RunTask(taskEntity, fins, tinsEntity, eventEntity);
 
                 eventEntity.State = EDBEntityState.Modified;
                 eventEntity.Status = 1;
@@ -102,7 +127,7 @@ namespace M.WFEngine.Flow
                     _DataAccess.Update(tinsEntity);
 
                     //3、生成下一个节点任务实例、并执行流转
-                    var nextTasks = _WFTask.GetNextTasks(taskEntity, tinsEntity);
+                    var nextTasks = _WFTask.GetNextTasks(taskEntity, tinsEntity, bisJsonData);
                     ExeNextTask(fins, nextTasks);
                 }
                 tran.Commit();
@@ -132,14 +157,7 @@ namespace M.WFEngine.Flow
                 {
                     var tinsNext = _WFTask.CreateTaskIns(fins, nextTask);
                     var taskSetting = _WFTask.GetTaskInfo(nextTask);
-                    if (nextTask.Type == ETaskType.End)
-                    {
-                        taskSetting.RunTask(fins, tinsNext, null);
-                    }
-                    else
-                    {
-                        taskSetting.CreateJob(fins, tinsNext, nextTask.Type == ETaskType.WorkAsync);
-                    }
+                    taskSetting.CreateJob(fins, tinsNext, nextTask.Type == ETaskType.WorkAsyncSendHttp);
                 }
             }
         }
@@ -159,7 +177,9 @@ namespace M.WFEngine.Flow
             var tinsEntity = _WFTask.GetTinsById(eventEntity.Tinsid);
             var taskEntity = _WFTask.GetTaskById(eventEntity.Taskid);
             var fins = _WorkFlowIns.GetFlowInstance(eventEntity.Finsid);
-            var nextTasks = _WFTask.GetNextTasks(taskEntity, tinsEntity);
+            var bisJsonData = GetBisData(taskEntity, eventEntity.Dataid, "", eventEntity.Tinsid);
+            var nextTasks = _WFTask.GetNextTasks(taskEntity, tinsEntity, bisJsonData);
+
             if (nextTasks.Length != 1)
             {
                 throw new Exception("流程配置错误，下个任务节点数量必须是1");
@@ -175,6 +195,8 @@ namespace M.WFEngine.Flow
                 tinsEntity.State = EDBEntityState.Modified;
                 tinsEntity.Edate = DateTime.Now;
                 _DataAccess.Update(tinsEntity);
+                //2、如果配置了多个下个任务节点，则需要获取业务数据
+
 
                 //2、找下个任务节点，并流转，回调节点不应该有多个下个节点
                 ExeNextTask(fins, nextTasks);

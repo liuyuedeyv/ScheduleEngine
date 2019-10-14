@@ -140,7 +140,7 @@ namespace M.WFDesigner.Repository
                     linkEntity.ID = link.ID;
                     linkEntity.Begintaskid = link.Begintaskid;
                     linkEntity.Endtaskid = link.Endtaskid;
-                    DataAccess.Update(linkEntity);
+                    var count = DataAccess.Update(linkEntity);
                 }
                 trans.Commit();
             }

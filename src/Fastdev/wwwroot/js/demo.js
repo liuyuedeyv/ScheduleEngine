@@ -361,7 +361,12 @@ function loadFlowInfo(flowId) {
                     id: v.id,
                     data: v
                 });
-                $(q.canvas).data('data-info', v);
+                if (q && q.canvas) {
+                    $(q.canvas).data('data-info', v);
+                }
+                else {
+                    console.log('流程图加载失败');
+                }
             });
             jpdata.instance.fire("jsPlumbDemoLoaded", jpdata.instance);
 

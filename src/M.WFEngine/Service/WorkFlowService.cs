@@ -4,7 +4,7 @@ using M.WFEngine.Flow;
 
 namespace M.WFEngine.Service
 {
-    public abstract class WorkFlowService : BaseFoo
+    public class WorkFlowService : BaseFoo
     {
         [Autowired]
         public IWorkFlow _WorkFlow { get; set; }
@@ -44,7 +44,7 @@ namespace M.WFEngine.Service
             return _WorkFlow.Callback(mqId);
         }
 
-        [Routing(EHttpMethod.HttpGet, "wft/appname")]
-        public abstract string GetAppName(string mqId);
+        //[Routing(EHttpMethod.HttpGet, "wft/appname")]
+        //public   string GetAppName(string mqId);
     }
 }

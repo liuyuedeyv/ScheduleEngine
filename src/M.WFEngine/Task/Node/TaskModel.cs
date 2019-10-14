@@ -18,33 +18,35 @@ namespace M.WFEngine.Task
         [Autowired]
         public override DataAccess _DataAccess { get; set; }
         [Autowired]
-        public IJsonConverter _JsonConverter { get; set; }
+        public override IJsonConverter _JsonConverter { get; set; }
         [Autowired]
-        public IEnumerable<IJob> Jobs { get; set; }
+        public override IWorkflowJobs _WFJobs { get; set; }
+
         public override ETaskType TaskType => ETaskType.Model;
 
 
-        public override bool RunTask(WFFinsEntity fins, WFTinsEntity tinsEntity, WFTEventEntity mqEntity)
+        public override string GetBisData(WFTaskEntity taskEntity, string dataId, string serviceId)
         {
-            Console.WriteLine($"决策节点{tinsEntity.Taskname}开始执行……");
             //调取远方模型进行预算，返回结果
 
-            var job = Jobs.Where(j => j.TaskType == this.TaskType).FirstOrDefault();
+            var job = _WFJobs.Jobs.Where(j => j.TaskType == this.TaskType).FirstOrDefault();
             //job.Exe("");
 
             Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("dataid", fins.Dataid);
+            data.Add("dataid", dataId);
+
+            var jsonData = _JsonConverter.Serialize(data);
             WFTDataEntity dataEntity = new WFTDataEntity();
             dataEntity.State = EDBEntityState.Added;
-            dataEntity.Flowid = fins.Flowid;
-            dataEntity.Finsid = fins.ID;
-            dataEntity.Taskid = tinsEntity.Taskid;
-            dataEntity.Tinsid = tinsEntity.ID;
+            dataEntity.Flowid = taskEntity.Flowid;
+            dataEntity.Finsid = "";
+            dataEntity.Taskid = taskEntity.ID;
+            dataEntity.Tinsid = "";
             dataEntity.Cdate = System.DateTime.Now;
-            dataEntity.JsonData = _JsonConverter.Serialize(data);
+            dataEntity.JsonData = jsonData;
             _DataAccess.Update(dataEntity);
 
-            return true;
+            return jsonData;
         }
     }
 }

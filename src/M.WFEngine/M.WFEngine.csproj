@@ -10,6 +10,7 @@
     <Compile Include="..\M.WorkFlow\Model\auto\WFLinkEntity.cs" Link="Model\auto\WFLinkEntity.cs" />
     <Compile Include="..\M.WorkFlow\Model\auto\WFOinsEntity.cs" Link="Model\auto\WFOinsEntity.cs" />
     <Compile Include="..\M.WorkFlow\Model\auto\WFServiceEntity.cs" Link="Model\auto\WFServiceEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Model\auto\WFTaskSettingEntity.cs" Link="Model\auto\WFTaskSettingEntity.cs" />
     <Compile Include="..\M.WorkFlow\Model\auto\WFTEventEntity.cs" Link="Model\auto\WFTEventEntity.cs" />
     <Compile Include="..\M.WorkFlow\Model\auto\WFTinsEntity.cs" Link="Model\auto\WFTinsEntity.cs" />
     <Compile Include="..\M.WorkFlow\Model\auto\WTaskEntity.cs" Link="Model\auto\WTaskEntity.cs" />
@@ -18,6 +19,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FD.Component.DB" Version="1.1.8.1" />
+    <Content Include="M.WFEngine.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FD.Component.DB" Version="1.1.8.5" />
+    <PackageReference Include="WebApiClient.JIT" Version="1.1.0" />
+  </ItemGroup>
+
+ 
 </Project>

@@ -1,1 +1,1 @@
-dotnet M.RemoteService.dll server.urls=http://localhost:5004
+dotnet M.RemoteService.dll server.urls=http://localhost:5005
