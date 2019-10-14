@@ -5,7 +5,7 @@ using FD.Simple.DB;
 using FD.Simple.Utils.Agent;
 using M.WorkFlow.Model;
 
-namespace M.WorkFlow.Engine.Task
+namespace M.WFEngine.Task
 {
     [Autowired]
     public class TaskJuHe : BaseTask

@@ -13,13 +13,8 @@
     <Compile Include="..\M.WorkFlow\Model\auto\WFTEventEntity.cs" Link="Model\auto\WFTEventEntity.cs" />
     <Compile Include="..\M.WorkFlow\Model\auto\WFTinsEntity.cs" Link="Model\auto\WFTinsEntity.cs" />
     <Compile Include="..\M.WorkFlow\Model\auto\WTaskEntity.cs" Link="Model\auto\WTaskEntity.cs" />
-    <Compile Include="..\M.WorkFlow\Model\ETaskType.cs" Link="Task\ETaskType.cs" />
-    <Compile Include="..\M.WorkFlow\Model\WFFlowEntity.cs" Link="Model\WFFlowEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Model\ETaskType.cs" Link="Model\ETaskType.cs" />
     <Compile Include="..\M.WorkFlow\Model\WTaskEntity.cs" Link="Model\WTaskEntity.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Task\Node\apiservice\" />
   </ItemGroup>
 
   <ItemGroup>

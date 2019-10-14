@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using FD.Simple.Utils.Provider;
 
-namespace M.WorkFlow.Repository
+namespace M.WFDesigner.Repository
 {
 
     [Autowired]

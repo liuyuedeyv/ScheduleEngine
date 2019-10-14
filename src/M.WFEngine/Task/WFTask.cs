@@ -1,21 +1,15 @@
 ﻿using FD.Simple.DB;
+using FD.Simple.Utils;
 using FD.Simple.Utils.Agent;
+using FD.Simple.Utils.Serialize;
+using M.WFEngine.Util;
 using M.WorkFlow.Model;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using M.WorkFlow.Engine.Task;
-using M.WFEngine.Task;
-using FD.Simple.Utils;
-using FD.Simple.Utils.Serialize;
-using M.WFEngine.Model;
-using M.WFEngine.Util;
-namespace M.WorkFlow.Engine
+
+namespace M.WFEngine.Task
 {
-
-
-
     [Autowired]
     public class WFTask : IWFTask
     {
