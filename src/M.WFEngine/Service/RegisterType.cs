@@ -5,15 +5,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using WebApiClient;
 
 
 namespace M.WFEngine.Service
 {
-    public class RegisterType : CustomTimer, IRegisterModuleType
+    public class RegisterType : CustomTimer, IRegisterType
     {
         public bool DisabledDefaultRegister => false;
-
 
         IWorkFlow _workflow;
         public void Application_Started(IApplicationBuilder app)
@@ -27,16 +25,10 @@ namespace M.WFEngine.Service
             return batchCount == actualBatchCount ? 0 : 10;
         }
 
-        public void Register(ContainerBuilder services, IConfiguration configuration)
+        public void Register(IServiceCollection services, IConfiguration configuration)
         {
-            string appUrl = "http://localhost:5004/acsa/registerwf";
-            HttpApi.Register<IAppService>().ConfigureHttpApiConfig(c =>
-            {
-                c.HttpHost = new Uri(appUrl);
-                c.FormatOptions.DateTimeFormat = DateTimeFormats.ISO8601_WithMillisecond;
-            }); ;
-
+            //TODO:此代码应该增加到容器中
+            services.AddHttpClient();
         }
-
     }
 }

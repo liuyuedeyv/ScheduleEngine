@@ -2,7 +2,6 @@
 using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Serialize;
 using M.WFEngine.Flow;
-using M.WFEngine.Task.Job;
 using M.WorkFlow.Model;
 using System;
 
@@ -14,8 +13,6 @@ namespace M.WFEngine.Task
         [Autowired]
         public override DataAccess _DataAccess { get; set; }
         public override ETaskType TaskType => ETaskType.End;
-        [Autowired]
-        public override IWorkflowJobs _WFJobs { get; set; }
         [Autowired]
         public override IJsonConverter _JsonConverter { get; set; }
 

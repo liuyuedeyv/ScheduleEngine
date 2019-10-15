@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Job\**" />
+    <EmbeddedResource Remove="Job\**" />
+    <None Remove="Job\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="M.ACSA.json" />
   </ItemGroup>
 

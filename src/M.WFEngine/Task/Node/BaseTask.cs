@@ -1,7 +1,6 @@
 ﻿using FD.Simple.DB;
 using FD.Simple.Utils.Serialize;
 using M.WFEngine.Service;
-using M.WFEngine.Task.Job;
 using M.WorkFlow.Model;
 using System.Linq;
 using System.Net.Http;
@@ -13,8 +12,6 @@ namespace M.WFEngine.Task
         public abstract DataAccess _DataAccess { get; set; }
 
         public abstract IJsonConverter _JsonConverter { get; set; }
-
-        public abstract IWorkflowJobs _WFJobs { get; set; }
 
         public abstract ETaskType TaskType { get; }
 
