@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace M.ACSA.Service
+namespace M.ACSA.AccessService
 {
     /// <summary>
     /// 注册dll到DI容器，后续此功能增加到apiloader

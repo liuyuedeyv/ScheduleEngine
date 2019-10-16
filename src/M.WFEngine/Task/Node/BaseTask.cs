@@ -1,5 +1,7 @@
 ﻿using FD.Simple.DB;
+using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Serialize;
+using M.WFEngine.AccessService;
 using M.WFEngine.Service;
 using M.WorkFlow.Model;
 using System.Linq;
@@ -7,11 +9,15 @@ using System.Net.Http;
 
 namespace M.WFEngine.Task
 {
+    [Autowired]
     public abstract class BaseTask : IBaseTask
     {
-        public abstract DataAccess _DataAccess { get; set; }
-
-        public abstract IJsonConverter _JsonConverter { get; set; }
+        [Autowired]
+        public DataAccess _DataAccess { get; set; }
+        [Autowired]
+        public IJsonConverter _JsonConverter { get; set; }
+        [Autowired]
+        public IAppAccessService _IAppAccessService { get; set; }
 
         public abstract ETaskType TaskType { get; }
 
@@ -29,30 +35,8 @@ namespace M.WFEngine.Task
         /// </summary>
         public virtual string GetBisData(WFTaskEntity taskEntity, string dataId, string serviceId)
         {
-            //var job = _WFJobs.GetBisDataForWorkflowJobs.Where(f => f.ServiceId == fins.ServiceId).FirstOrDefault();
-            //if (null != job)
-            //{
-            //    var jsonDasta = job.GetBisData(fins.Dataid, task);
-            //    WFTDataEntity dataEntity = new WFTDataEntity();
-            //    dataEntity.State = EDBEntityState.Added;
-            //    dataEntity.Flowid = fins.Flowid;
-            //    dataEntity.Finsid = fins.ID;
-            //    dataEntity.Taskid = task.ID;
-            //    //dataEntity.Tinsid = tinsEntity.ID;
-            //    dataEntity.Cdate = System.DateTime.Now;
-            //    dataEntity.JsonData = jsonDasta;
-            //    _DataAccess.Update(dataEntity);
-            //}
-
-            var info = new FlowInfo()
-            {
-                EventType = "1",
-                DataId = dataId,
-                ServiceId = serviceId
-            };
-            HttpClient client = new HttpClient();
-            HttpContent httpContent = new StringContent(_JsonConverter.Serialize(info), System.Text.Encoding.UTF8, "application/json");
-            var jsonData = client.PostAsync("http://localhost:5004/acsa/registerwf", httpContent).GetAwaiter().GetResult().Content.ReadAsStringAsync().Result;
+            //调取远方模型进行预算，返回结果
+            var jsonData = _IAppAccessService.GetWorkflowServiceBisdata(serviceId, dataId).GetAwaiter().GetResult();
 
             WFTDataEntity dataEntity = new WFTDataEntity();
             dataEntity.State = EDBEntityState.Added;

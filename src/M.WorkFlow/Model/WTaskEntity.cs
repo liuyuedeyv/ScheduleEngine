@@ -16,7 +16,5 @@ namespace M.WorkFlow.Model
             get { return _Type; }
             set { _Type = value; OnPropertyChanged("Type"); }
         }
-
-        public WFTaskSettingEntity SettingEntity { get; set; }
     }
 }

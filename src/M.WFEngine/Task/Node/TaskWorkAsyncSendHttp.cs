@@ -1,8 +1,8 @@
-﻿using FD.Simple.DB;
-using FD.Simple.Utils.Agent;
+﻿using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Serialize;
 using M.WorkFlow.Model;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 
 namespace M.WFEngine.Task
@@ -10,35 +10,54 @@ namespace M.WFEngine.Task
     [Autowired]
     public class TaskWorkAsyncSendHttp : BaseTask
     {
-        [Autowired]
-        public override DataAccess _DataAccess { get; set; }
-        [Autowired]
-        public override IJsonConverter _JsonConverter { get; set; }
+
+        IJsonConverter _jsonConverter;
+        IHttpClientFactory _httpClientFactory;
+        public TaskWorkAsyncSendHttp(IHttpClientFactory httpClientFactory, IJsonConverter jsonConverter)
+        {
+            _httpClientFactory = httpClientFactory;
+            _jsonConverter = jsonConverter;
+        }
 
         public override ETaskType TaskType => ETaskType.WorkAsyncSendHttp;
 
-        static HttpClient httpClient = new HttpClient();
-        private static readonly object asyncLock = new object();
-        public override bool RunTask(WFTaskEntity taskEntity, WFFinsEntity fins, WFTinsEntity tinsEntity, WFTEventEntity mqEntity)
+        public override bool RunTask(WFTaskEntity taskEntity, WFFinsEntity fins, WFTinsEntity tinsEntity, WFTEventEntity enventEntity)
         {
-            Console.WriteLine($"异步节点{tinsEntity.Taskname}开始执行……");
+            // 根据tasksetting 节点的配置信息读取要发送到的远端地址
+            //可以是多个地址
+            if (!string.IsNullOrWhiteSpace(taskEntity.Setting))
+            {
+                var list = _jsonConverter.Deserialize<List<SendHttpModel>>(taskEntity.Setting);
+                if (list != null)
+                {
+                    Dictionary<string, string> dicPostdata = null;
+                    foreach (var item in list)
+                    {
+                        Console.WriteLine($"发送数据到远端{item.Url}");
 
-            var settingEntity = taskEntity.SettingEntity;
-
-            //lock (asyncLock)
-            //{
-            var url = $@"http://localhost:5005/api/task?CallbackTag={mqEntity.ID}";
-
-            //1、callbacktag
-            //2、dataid
-            //3、
-
-            //httpClient.Timeout = new TimeSpan(0, 0, 10);
-            httpClient.GetAsync(url).GetAwaiter().GetResult();
-
-
-            //}
-            return false;
+                        dicPostdata = new Dictionary<string, string>();
+                        dicPostdata.Add("callbackTag", enventEntity.ID);
+                        dicPostdata.Add("customTag", item.CustomTag);
+                        dicPostdata.Add("dataId", enventEntity.Dataid);
+                        var content = new FormUrlEncodedContent(dicPostdata);
+                        var httpClient = _httpClientFactory.CreateClient();
+                        var response = httpClient.PostAsync(item.Url, content).GetAwaiter().GetResult();
+                        if (response.IsSuccessStatusCode)
+                        {
+                            response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                        }
+                    }
+                    return false;
+                }
+            }
+            return true;
         }
+    }
+
+    public class SendHttpModel
+    {
+        public string Url { get; set; }
+
+        public string CustomTag { get; set; }
     }
 }

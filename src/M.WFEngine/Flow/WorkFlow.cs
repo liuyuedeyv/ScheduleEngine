@@ -48,7 +48,7 @@ namespace M.WFEngine.Flow
                 throw new Exception("没有找到开始节点");
             }
             //判断是否
-            var bisJsonData = GetBisData(startTask, dataId, serviceId, string.Empty);
+            var bisJsonData = GetBisData(startTask, dataId, serviceId, string.Empty, out bool isMultipleNextTask);
             using (var trans = TransHelper.BeginTrans())
             {
                 //1、创建流程实例、开始节点实例，执行开始节点任务
@@ -73,10 +73,11 @@ namespace M.WFEngine.Flow
             return 1;
         }
 
-        private string GetBisData(WFTaskEntity taskEntity, string dataId, string serviceId, string tinsId)
+        private string GetBisData(WFTaskEntity taskEntity, string dataId, string serviceId, string tinsId, out bool isMultipleNextTask)
         {
+            isMultipleNextTask = _WFTask.IsMultipleNextTask(taskEntity) && taskEntity.Type != ETaskType.BingXing;
             string jsonData = string.Empty;
-            if (_WFTask.IsMultipleNextTask(taskEntity))
+            if (isMultipleNextTask)
             {
                 jsonData = _WFTask.GetTaskInfo(taskEntity).GetBisData(taskEntity, dataId, serviceId);
             }
@@ -107,7 +108,11 @@ namespace M.WFEngine.Flow
             var taskSetting = _WFTask.GetTaskInfo(taskEntity);
             var tinsEntity = _WFTask.GetTinsById(eventEntity.Tinsid);
             var fins = _WorkFlowIns.GetFlowInstance(eventEntity.Finsid);
-            var bisJsonData = GetBisData(taskEntity, eventEntity.Dataid, "", eventEntity.Tinsid);
+            var bisJsonData = GetBisData(taskEntity, eventEntity.Dataid, fins.ServiceId, eventEntity.Tinsid, out bool isMultipleNextTask);
+            if (isMultipleNextTask && string.IsNullOrWhiteSpace(bisJsonData))
+            {
+                throw new Exception("获取远端数据异常，请检查远端应用是否正常 ");
+            }
             using (var tran = TransHelper.BeginTrans())
             {
                 //1、执行具体任务，并更新信息
@@ -176,7 +181,7 @@ namespace M.WFEngine.Flow
             var tinsEntity = _WFTask.GetTinsById(eventEntity.Tinsid);
             var taskEntity = _WFTask.GetTaskById(eventEntity.Taskid);
             var fins = _WorkFlowIns.GetFlowInstance(eventEntity.Finsid);
-            var bisJsonData = GetBisData(taskEntity, eventEntity.Dataid, "", eventEntity.Tinsid);
+            var bisJsonData = GetBisData(taskEntity, eventEntity.Dataid, fins.ServiceId, eventEntity.Tinsid, out bool isMultipleNextTask);
             var nextTasks = _WFTask.GetNextTasks(taskEntity, tinsEntity, bisJsonData);
 
             if (nextTasks.Length != 1)

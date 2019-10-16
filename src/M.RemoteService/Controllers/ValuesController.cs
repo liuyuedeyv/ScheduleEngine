@@ -18,8 +18,9 @@ namespace M.RemoteService.Controllers
 
         // GET api/values
         [HttpGet]
+        [HttpPost]
         [Route("api/task")]
-        public ActionResult<IEnumerable<string>> Get([FromQuery]RemoteMethodInfo info)
+        public ActionResult<IEnumerable<string>> Get([FromForm]RemoteMethodInfo info)
         {
             if (!string.IsNullOrWhiteSpace(info?.CallbackTag))
             {

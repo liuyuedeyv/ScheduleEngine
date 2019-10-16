@@ -11,10 +11,6 @@ namespace M.WFEngine.Task
     [Autowired]
     public class TaskJuHe : BaseTask
     {
-        [Autowired]
-        public override DataAccess _DataAccess { get; set; }
-        [Autowired]
-        public override IJsonConverter _JsonConverter { get; set; }
         public override ETaskType TaskType => ETaskType.JuHe;
     }
 }

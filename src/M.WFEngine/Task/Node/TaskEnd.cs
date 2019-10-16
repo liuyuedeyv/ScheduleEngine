@@ -10,12 +10,7 @@ namespace M.WFEngine.Task
     [Autowired]
     public class TaskEnd : BaseTask
     {
-        [Autowired]
-        public override DataAccess _DataAccess { get; set; }
         public override ETaskType TaskType => ETaskType.End;
-        [Autowired]
-        public override IJsonConverter _JsonConverter { get; set; }
-
         public override bool RunTask(WFTaskEntity taskEntity, WFFinsEntity fins, WFTinsEntity tinsEntity, WFTEventEntity mqEntity)
         {
             //结束节点不需要做具体任务

@@ -42,15 +42,26 @@ namespace M.WorkFlow.Model
         //    set { _Type = value; OnPropertyChanged("Type"); }
         //}
 
-        private string _Xml;
+        private string _Setting;
         /// <summary>
-        /// 处理人XML
+        /// settingjson
         /// </summary>
         [DataMember]
-        public string Xml
+        public string Setting
         {
-            get { return _Xml; }
-            set { _Xml = value; OnPropertyChanged("Xml"); }
+            get { return _Setting; }
+            set { _Setting = value; OnPropertyChanged("Setting"); }
+        }
+
+        private string _Datatemplate;
+        /// <summary>
+        /// Datatemplate
+        /// </summary>
+        [DataMember]
+        public string Datatemplate
+        {
+            get { return _Datatemplate; }
+            set { _Datatemplate = value; OnPropertyChanged("Datatemplate"); }
         }
 
         private string _Filter;
@@ -97,50 +108,6 @@ namespace M.WorkFlow.Model
             set { _Opertype = value; OnPropertyChanged("Opertype"); }
         }
 
-        private string _Exscript;
-        /// <summary>
-        /// 脚本扩展
-        /// </summary>
-        [DataMember]
-        public string Exscript
-        {
-            get { return _Exscript; }
-            set { _Exscript = value; OnPropertyChanged("Exscript"); }
-        }
-
-        private int _Mandate;
-        /// <summary>
-        /// 任务期限（天）
-        /// </summary>
-        [DataMember]
-        public int Mandate
-        {
-            get { return _Mandate; }
-            set { _Mandate = value; OnPropertyChanged("Mandate"); }
-        }
-
-        private string _Remind;
-        /// <summary>
-        /// 提醒内容
-        /// </summary>
-        [DataMember]
-        public string Remind
-        {
-            get { return _Remind; }
-            set { _Remind = value; OnPropertyChanged("Remind"); }
-        }
-
-        private string _Overremind;
-        /// <summary>
-        /// 超期提醒
-        /// </summary>
-        [DataMember]
-        public string Overremind
-        {
-            get { return _Overremind; }
-            set { _Overremind = value; OnPropertyChanged("Overremind"); }
-        }
-
         private string _Memo;
         /// <summary>
         /// 备注信息
@@ -150,61 +117,6 @@ namespace M.WorkFlow.Model
         {
             get { return _Memo; }
             set { _Memo = value; OnPropertyChanged("Memo"); }
-        }
-
-        private string _Ctgridinfo;
-        /// <summary>
-        /// 从表扩展
-        /// </summary>
-        [DataMember]
-        public string Ctgridinfo
-        {
-            get { return _Ctgridinfo; }
-            set { _Ctgridinfo = value; OnPropertyChanged("Ctgridinfo"); }
-        }
-
-        private string _Formid;
-        /// <summary>
-        /// 表单
-        /// </summary>
-        [DataMember]
-        public string Formid
-        {
-            get { return _Formid; }
-            set { _Formid = value; OnPropertyChanged("Formid"); }
-        }
-
-        private string _Acrequired;
-        /// <summary>
-        /// 审批意见必填
-        /// </summary>
-        [DataMember]
-        public string Acrequired
-        {
-            get { return _Acrequired; }
-            set { _Acrequired = value; OnPropertyChanged("Acrequired"); }
-        }
-
-        private int _Updateagent;
-        /// <summary>
-        /// 编写审批报告
-        /// </summary>
-        [DataMember]
-        public int Updateagent
-        {
-            get { return _Updateagent; }
-            set { _Updateagent = value; OnPropertyChanged("Updateagent"); }
-        }
-
-        private string _Moduleid;
-        /// <summary>
-        /// 评价模型
-        /// </summary>
-        [DataMember]
-        public string Moduleid
-        {
-            get { return _Moduleid; }
-            set { _Moduleid = value; OnPropertyChanged("Moduleid"); }
         }
 
         private string _Y;
@@ -227,17 +139,6 @@ namespace M.WorkFlow.Model
         {
             get { return _X; }
             set { _X = value; OnPropertyChanged("X"); }
-        }
-
-        private decimal _Orderid;
-        /// <summary>
-        /// 排序
-        /// </summary>
-        [DataMember]
-        public decimal Orderid
-        {
-            get { return _Orderid; }
-            set { _Orderid = value; OnPropertyChanged("Orderid"); }
         }
 
         private string _Baseid;

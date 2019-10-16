@@ -66,6 +66,17 @@ namespace M.WorkFlow.Model
             get { return _Currentflowid; }
             set { _Currentflowid = value; OnPropertyChanged("Currentflowid"); }
         }
+
+        private string _WfappId;
+        /// <summary>
+        /// _WfappId
+        /// </summary>
+        [DataMember]
+        public string WfappId
+        {
+            get { return _WfappId; }
+            set { _WfappId = value; OnPropertyChanged("WfappId"); }
+        }
     }
 }//end
 

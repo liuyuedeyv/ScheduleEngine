@@ -7,22 +7,50 @@ namespace M.WorkFlow.Model
     {
         public string GetStringProperty(string key)
         {
-            return this[key].ConvertTostring();
+            if (this.ContainsKey(key))
+            {
+                return this[key].ConvertTostring();
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         public int GetIntProperty(string key)
         {
-            return this[key].ConvertToint();
+            if (this.ContainsKey(key))
+            {
+                return this[key].ConvertToint();
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public double GetDoubleProperty(string key)
         {
-            return this[key].ConvertTodouble();
+            if (this.ContainsKey(key))
+            {
+                return this[key].ConvertTodouble();
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public object GetObjectProperty(string key)
         {
-            return this[key];
+            if (this.ContainsKey(key))
+            {
+                return this[key];
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

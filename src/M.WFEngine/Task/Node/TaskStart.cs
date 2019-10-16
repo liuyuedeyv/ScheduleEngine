@@ -11,10 +11,6 @@ namespace M.WFEngine.Task
     [Autowired]
     public class TaskStart : BaseTask
     {
-        [Autowired]
-        public override DataAccess _DataAccess { get; set; }
         public override ETaskType TaskType => ETaskType.Start;
-        [Autowired]
-        public override IJsonConverter _JsonConverter { get; set; }
     }
 }
