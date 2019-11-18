@@ -25,5 +25,15 @@ namespace M.WFEngine.AccessService
         /// <param name="objectCode">自定义对象的编码</param>
         /// <returns></returns>
         Task<string> GetModelTaskBisdata(string serviceId, string dataId, string objectCode);
+
+        /// <summary>
+        /// 获取变量相关联的业务数据
+        /// </summary>
+        /// <param name="serviceId"></param>
+        /// <param name="dataId"></param>
+        /// <param name="objectCode">自定义对象的编码</param>
+        /// <returns></returns>
+        Task<string> GetVaribleTaskBisdata(string serviceId, string dataId, string varibles);
+
     }
 }

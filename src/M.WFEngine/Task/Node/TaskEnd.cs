@@ -1,6 +1,7 @@
 ﻿using FD.Simple.DB;
 using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Serialize;
+using M.WFEngine.AccessService;
 using M.WFEngine.Flow;
 using M.WorkFlow.Model;
 using System;
@@ -19,7 +20,7 @@ namespace M.WFEngine.Task
 
         public override void CreateJob(WFFinsEntity fins, WFTinsEntity tinsEntity, bool needWaitCallback)
         {
-            Console.WriteLine($"结束节点{tinsEntity.Taskname}开始执行……");
+            //Console.WriteLine($"结束节点{tinsEntity.Taskname}开始执行……");
 
             //不用为结束节点创建待执行任务
             fins.State = EDBEntityState.Modified;
@@ -27,7 +28,7 @@ namespace M.WFEngine.Task
             fins.Edate = DateTime.Now;
             _DataAccess.Update(fins);
         }
-        public override string GetBisData(WFTaskEntity taskEntity, string dataId, string serviceId)
+        public override string GetBisData(WFTaskEntity taskEntity, string dataId, string serviceId, EAccessMessageType messageType)
         {
             //结束节点不用获取业务数据
             return string.Empty;

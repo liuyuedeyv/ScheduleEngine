@@ -3,6 +3,7 @@ using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Serialize;
 using M.WFEngine.AccessService;
 using M.WFEngine.Service;
+using M.WFEngine.Util;
 using M.WorkFlow.Model;
 using System.Linq;
 using System.Net.Http;
@@ -26,17 +27,25 @@ namespace M.WFEngine.Task
         /// </summary>
         public virtual bool RunTask(WFTaskEntity taskEntity, WFFinsEntity fins, WFTinsEntity tinsEntity, WFTEventEntity mqEntity)
         {
-            System.Console.WriteLine($"{taskEntity.Type}节点{tinsEntity.Taskname}开始执行……");
+            //System.Console.WriteLine($"{taskEntity.Type}节点{tinsEntity.Taskname}开始执行……");
 
             return true;
         }
         /// <summary>
         /// 获取业务数据
         /// </summary>
-        public virtual string GetBisData(WFTaskEntity taskEntity, string dataId, string serviceId)
+        public virtual string GetBisData(WFTaskEntity taskEntity, string dataId, string serviceId, EAccessMessageType messageType)
         {
-            //调取远方模型进行预算，返回结果
-            var jsonData = _IAppAccessService.GetWorkflowServiceBisdata(serviceId, dataId).GetAwaiter().GetResult();
+            //调取远方模型进行，返回结果
+            string jsonData = string.Empty;
+            if (messageType == EAccessMessageType.GetVariable)
+            {
+                jsonData = _IAppAccessService.GetVaribleTaskBisdata(serviceId, dataId, taskEntity.GetTemplateInfo()).GetAwaiter().GetResult();
+            }
+            else
+            {
+                jsonData = _IAppAccessService.GetWorkflowServiceBisdata(serviceId, dataId).GetAwaiter().GetResult();
+            }
 
             WFTDataEntity dataEntity = new WFTDataEntity();
             dataEntity.State = EDBEntityState.Added;

@@ -6,5 +6,7 @@
         public string DataId { get; set; }
         public EAccessMessageType MsgType { get; set; }
         public string ObjectCode { get; set; }
+
+        public string Body { get; set; }
     }
 }

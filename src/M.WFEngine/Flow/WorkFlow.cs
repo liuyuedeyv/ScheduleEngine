@@ -1,15 +1,12 @@
 ﻿using FD.Simple.DB;
-using FD.Simple.Utils;
 using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Serialize;
-using M.WFEngine.Service;
+using M.WFEngine.AccessService;
 using M.WFEngine.Task;
+using M.WFEngine.Util;
 using M.WorkFlow.Model;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace M.WFEngine.Flow
@@ -75,15 +72,18 @@ namespace M.WFEngine.Flow
 
         private string GetBisData(WFTaskEntity taskEntity, string dataId, string serviceId, string tinsId, out bool isMultipleNextTask)
         {
+            //从远端获取数据的条件：
+            //1、只有接下来有多个节点并且当前节点不等于并行节点，才会去远端获取数据
+            //2、当前节点的配置信息中用到的变量，则需要去远端解析
+            bool hasTemplateInfo = taskEntity.HasTemplateInfo();
             isMultipleNextTask = _WFTask.IsMultipleNextTask(taskEntity) && taskEntity.Type != ETaskType.BingXing;
             string jsonData = string.Empty;
-            if (isMultipleNextTask)
+            if (isMultipleNextTask || hasTemplateInfo)
             {
-                jsonData = _WFTask.GetTaskInfo(taskEntity).GetBisData(taskEntity, dataId, serviceId);
+                jsonData = _WFTask.GetTaskInfo(taskEntity).GetBisData(taskEntity, dataId, serviceId, hasTemplateInfo ? EAccessMessageType.GetVariable : EAccessMessageType.GetWorkflowServiceBisdata);
             }
             return jsonData;
         }
-
         #endregion
 
         #region ProcessWftEvent
@@ -113,6 +113,7 @@ namespace M.WFEngine.Flow
             {
                 throw new Exception("获取远端数据异常，请检查远端应用是否正常 ");
             }
+            taskEntity.ReplaceTemplateInfo(bisJsonData);
             using (var tran = TransHelper.BeginTrans())
             {
                 //1、执行具体任务，并更新信息
@@ -188,6 +189,7 @@ namespace M.WFEngine.Flow
             {
                 throw new Exception("流程配置错误，下个任务节点数量必须是1");
             }
+            taskEntity.ReplaceTemplateInfo(bisJsonData);
             using (var trans = TransHelper.BeginTrans())
             {
                 //1、更新任务实例状态

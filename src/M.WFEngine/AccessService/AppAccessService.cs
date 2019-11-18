@@ -30,6 +30,10 @@ namespace M.WFEngine.AccessService
             return await GetRemoteBisdata(serviceId, dataId, EAccessMessageType.GetWorkflowServiceBisdata, null);
         }
 
+        public async Task<string> GetVaribleTaskBisdata(string serviceId, string dataId, string varibles)
+        {
+            return await GetRemoteBisdata(serviceId, dataId, EAccessMessageType.GetVariable, varibles);
+        }
         private async Task<string> GetRemoteBisdata(string serviceId, string dataId, EAccessMessageType msgType, string objectCode)
         {
             var client = _httpClientFactory.CreateClient();
@@ -38,7 +42,8 @@ namespace M.WFEngine.AccessService
                 ServiceId = serviceId,
                 DataId = dataId,
                 MsgType = msgType,
-                ObjectCode = objectCode
+                ObjectCode = objectCode,
+                Body = objectCode
             };
             var content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
 
@@ -66,5 +71,6 @@ namespace M.WFEngine.AccessService
             filter = TableFilter.New().Equals("id", serviceEntity.WfappId);
             return _dataAccess.Query("wfapp").FixField("url").Where(filter).QueryScalar().ConvertTostring();
         }
+
     }
 }

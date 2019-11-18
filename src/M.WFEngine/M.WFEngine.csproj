@@ -27,7 +27,12 @@
 
   <ItemGroup>
     <PackageReference Include="FD.Component.DB" Version="1.1.8.5" />
-    <PackageReference Include="microsoft.extensions.http" Version="2.1.0" />
+    <PackageReference Include="FD.Simple.Utils" Version="1.9.4" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\code\FD.Component\FD.Component.RabbitMQ\src\FD.Component.ConsumeMQ\FD.Component.RabbitMQ.csproj" />
   </ItemGroup>
 
  
