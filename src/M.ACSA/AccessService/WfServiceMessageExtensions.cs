@@ -31,6 +31,16 @@ namespace M.ACSA.AccessService
                     }
                 }
             }
+            else if (info.MsgType == EResponseMessageType.GetVariable)
+            {
+                foreach (BaseWfServiceMessage service in serviceMessages)
+                {
+                    if (service.WFServcieId == info.ServiceId && service.AccessMessageType == EResponseMessageType.GetVariable)
+                    {
+                        return service;
+                    }
+                }
+            }
             return null;
         }
         /// <summary>

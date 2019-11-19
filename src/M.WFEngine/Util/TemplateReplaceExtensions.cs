@@ -19,7 +19,7 @@ namespace M.WFEngine.Util
             {
                 var reg = new Regex(regStr);
                 // 匹配模板： "Exchange:{@Exchange},ServerName:{@sserverName}";
-                var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JObject>(taskEntity.Setting);
+                var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JObject>(jsonData);
                 foreach (var item in reg.Matches(taskEntity.Setting))
                 {
                     var tmp = item.ToString();

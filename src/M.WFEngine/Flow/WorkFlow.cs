@@ -90,6 +90,9 @@ namespace M.WFEngine.Flow
         public int ProcessWftEvent(uint batchCount)
         {
             var filter = TableFilter.New().Equals("status", 0);//.Equals("waitcallback", 0);
+#if DEBUG
+            filter = TableFilter.New().Equals("status", 0).Equals("flowid", "00001F493WJRC0000A01");
+#endif
             var jobs = _DataAccess.Query(WFTEventEntity.TableCode).FixField("*").Paging(1, batchCount).Where(filter).QueryList<WFTEventEntity>();
 
             Parallel.ForEach<WFTEventEntity>(jobs,

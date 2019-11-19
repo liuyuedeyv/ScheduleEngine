@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\M.WFEngine\M.WFEngine.csproj" />
+    <PackageReference Include="FD.Simple.Utils" Version="1.9.3" />
   </ItemGroup>
 
 </Project>
