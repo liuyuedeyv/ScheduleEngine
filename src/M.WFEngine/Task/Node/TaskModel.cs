@@ -24,7 +24,7 @@ namespace M.WFEngine.Task
         }
 
         public override ETaskType TaskType => ETaskType.Model;
-        public override string GetBisData(WFTaskEntity taskEntity, string dataId, string serviceId)
+        public override string GetBisData(WFTaskEntity taskEntity, string dataId, string serviceId, EAccessMessageType messageType)
         {
             //从tasksetting获取配置的远程对象代码，调取远方模型进行预算，返回结果
             string jsonData = "{}";

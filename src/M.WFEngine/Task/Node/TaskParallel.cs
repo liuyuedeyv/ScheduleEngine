@@ -4,6 +4,7 @@ using System.Text;
 using FD.Simple.DB;
 using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Serialize;
+using M.WFEngine.AccessService;
 using M.WorkFlow.Model;
 
 namespace M.WFEngine.Task
@@ -13,10 +14,10 @@ namespace M.WFEngine.Task
     {
         public override ETaskType TaskType => ETaskType.BingXing;
 
-        public override string GetBisData(WFTaskEntity taskEntity, string dataId, string serviceId)
+        public override string GetBisData(WFTaskEntity taskEntity, string dataId, string serviceId, EAccessMessageType messageType)
         {
             //并行节点不用获取业务数据
             return string.Empty;
         }
-    }
+}
 }

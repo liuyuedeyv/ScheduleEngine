@@ -8,5 +8,7 @@ namespace M.ACSA.ResponseService
         public string DataId { get; set; }
         public EResponseMessageType MsgType { get; set; }
         public string ObjectCode { get; set; }
+
+        public string Body { get; set; }
     }
 }

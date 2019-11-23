@@ -33,7 +33,7 @@ namespace M.WFEngine.Task
                     Dictionary<string, string> dicPostdata = null;
                     foreach (var item in list)
                     {
-                        Console.WriteLine($"发送数据到远端{item.Url}");
+                        //Console.WriteLine($"发送数据到远端{item.Url}");
 
                         dicPostdata = new Dictionary<string, string>();
                         dicPostdata.Add("callbackTag", enventEntity.ID);

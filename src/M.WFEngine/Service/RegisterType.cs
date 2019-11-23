@@ -1,9 +1,11 @@
 ﻿using Autofac;
 using FD.Simple.Utils.Agent;
 using M.WFEngine.Flow;
+using M.WFEngine.Task;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Polly;
 using System;
 
 
@@ -27,6 +29,10 @@ namespace M.WFEngine.Service
 
         public void Register(IServiceCollection services, IConfiguration configuration)
         {
+            //重试三次的策略，间隔时间1S、2S、3S秒
+            services.AddHttpClient<TaskWorkAsyncSendHttp>().
+                AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(1000 * _)));
+
             //TODO:此代码应该增加到容器中
             services.AddHttpClient();
         }

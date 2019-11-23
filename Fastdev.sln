@@ -26,6 +26,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "M.WFEngine", "src\M.WFEngin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "M.RemoteService", "src\M.RemoteService\M.RemoteService.csproj", "{5D753849-CBA2-4441-9CAB-C03DF7284F36}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FD.Component.RabbitMQ", "..\..\code\FD.Component\FD.Component.RabbitMQ\src\FD.Component.ConsumeMQ\FD.Component.RabbitMQ.csproj", "{E5FAAB66-64C7-44C2-A5A1-F829C84F5540}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{5D753849-CBA2-4441-9CAB-C03DF7284F36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D753849-CBA2-4441-9CAB-C03DF7284F36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D753849-CBA2-4441-9CAB-C03DF7284F36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5FAAB66-64C7-44C2-A5A1-F829C84F5540}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5FAAB66-64C7-44C2-A5A1-F829C84F5540}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5FAAB66-64C7-44C2-A5A1-F829C84F5540}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5FAAB66-64C7-44C2-A5A1-F829C84F5540}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{11B23EA6-5B56-4439-80CA-047161A2B0E1} = {CF5825D1-89EE-43A6-BCCD-3E68E23BE8FE}
 		{DC938F10-AC40-4BC1-A8E3-F0674CDE5943} = {B20CFCB6-A2F4-4EA8-98CC-80506447EBB8}
 		{5D753849-CBA2-4441-9CAB-C03DF7284F36} = {CF5825D1-89EE-43A6-BCCD-3E68E23BE8FE}
+		{E5FAAB66-64C7-44C2-A5A1-F829C84F5540} = {B20CFCB6-A2F4-4EA8-98CC-80506447EBB8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5DAA31F3-A494-45B7-B279-CECEC606EAD5}

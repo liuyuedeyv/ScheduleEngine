@@ -9,6 +9,10 @@
         /// <summary>
         /// 获取决策节点业务数据
         /// </summary>
-        GetModelTaskBisdata = 2
+        GetModelTaskBisdata = 2,
+        /// <summary>
+        /// 从远端获取变量
+        /// </summary>
+        GetVariable = 3
     }
 }
