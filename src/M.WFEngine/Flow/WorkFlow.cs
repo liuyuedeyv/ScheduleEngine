@@ -7,6 +7,7 @@ using M.WFEngine.Util;
 using M.WorkFlow.Model;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace M.WFEngine.Flow
@@ -90,9 +91,9 @@ namespace M.WFEngine.Flow
         public int ProcessWftEvent(uint batchCount)
         {
             var filter = TableFilter.New().Equals("status", 0);//.Equals("waitcallback", 0);
-#if DEBUG
-            filter = TableFilter.New().Equals("status", 0).Equals("flowid", "00001F493WJRC0000A01");
-#endif
+                                                               //#if DEBUG
+                                                               //            filter = TableFilter.New().Equals("status", 0).Equals("flowid", "00001F493WJRC0000A01");
+                                                               //#endif
             var jobs = _DataAccess.Query(WFTEventEntity.TableCode).FixField("*").Paging(1, batchCount).Where(filter).QueryList<WFTEventEntity>();
 
             Parallel.ForEach<WFTEventEntity>(jobs,
@@ -136,9 +137,37 @@ namespace M.WFEngine.Flow
 
                     //3、生成下一个节点任务实例、并执行流转
                     var nextTasks = _WFTask.GetNextTasks(taskEntity, tinsEntity, bisJsonData);
-                    ExeNextTask(fins, nextTasks);
+                    //如果下一个节点是聚合节点，则需要加锁，防止与回调冲突。默认等待10S
+                    if (nextTasks.Length == 1 && nextTasks[0].Type == ETaskType.JuHe)
+                    {
+                        Mutex mutex = new Mutex(false, $"{MutexConfig.WORKFLOWLOCKPRE}{fins.Dataid}", out bool hasLock);
+                        if (mutex.WaitOne(MutexConfig.WORKFLOWLOCKTIMEOUT))
+                        {
+                            try
+                            {
+                                ExeNextTask(fins, nextTasks);
+                                tran.Commit();
+                            }
+                            finally
+                            {
+                                mutex.ReleaseMutex();
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception($"未获取独占锁，请重试，dataid：{fins.Dataid }");
+                        }
+                    }
+                    else
+                    {
+                        ExeNextTask(fins, nextTasks);
+                        tran.Commit();
+                    }
                 }
-                tran.Commit();
+                else
+                {
+                    tran.Commit();
+                }
             }
             return 1;
         }
@@ -193,7 +222,7 @@ namespace M.WFEngine.Flow
                 throw new Exception("流程配置错误，下个任务节点数量必须是1");
             }
             taskEntity.ReplaceTemplateInfo(bisJsonData);
-            using (var trans = TransHelper.BeginTrans())
+            using (var tran = TransHelper.BeginTrans())
             {
                 //1、更新任务实例状态
                 eventEntity.State = EDBEntityState.Modified;
@@ -204,12 +233,34 @@ namespace M.WFEngine.Flow
                 tinsEntity.State = EDBEntityState.Modified;
                 tinsEntity.Edate = DateTime.Now;
                 _DataAccess.Update(tinsEntity);
-                //2、如果配置了多个下个任务节点，则需要获取业务数据
-
 
                 //2、找下个任务节点，并流转，回调节点不应该有多个下个节点
-                ExeNextTask(fins, nextTasks);
-                trans.Commit();
+                //如果下一个节点是聚合节点，则需要加锁，防止与回调冲突。默认等待10S
+                if (nextTasks.Length == 1 && nextTasks[0].Type == ETaskType.JuHe)
+                {
+                    Mutex mutex = new Mutex(false, $"{MutexConfig.WORKFLOWLOCKPRE}{fins.Dataid}", out bool hasLock);
+                    if (mutex.WaitOne(MutexConfig.WORKFLOWLOCKTIMEOUT))
+                    {
+                        try
+                        {
+                            ExeNextTask(fins, nextTasks);
+                            tran.Commit();
+                        }
+                        finally
+                        {
+                            mutex.ReleaseMutex();
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception($"未获取独占锁，请重试，dataid：{fins.Dataid }");
+                    }
+                }
+                else
+                {
+                    ExeNextTask(fins, nextTasks);
+                    tran.Commit();
+                }
             }
             return 1;
         }
