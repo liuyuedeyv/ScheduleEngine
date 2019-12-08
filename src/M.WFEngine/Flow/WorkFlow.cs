@@ -1,5 +1,6 @@
 ﻿using FD.Simple.DB;
 using FD.Simple.Utils.Agent;
+using FD.Simple.Utils.Logging;
 using FD.Simple.Utils.Serialize;
 using M.WFEngine.AccessService;
 using M.WFEngine.Task;
@@ -27,6 +28,9 @@ namespace M.WFEngine.Flow
 
         [Autowired]
         public IJsonConverter _JsonConverter { get; set; }
+
+        [Autowired]
+        public IFDLogger _Logger { get; set; }
         #endregion
 
         #region Start
@@ -140,20 +144,13 @@ namespace M.WFEngine.Flow
                     //如果下一个节点是聚合节点，则需要加锁，防止与回调冲突。默认等待10S
                     if (nextTasks.Length == 1 && nextTasks[0].Type == ETaskType.JuHe)
                     {
-                        Mutex mutex = new Mutex(false, $"{MutexConfig.WORKFLOWLOCKPRE}{fins.Dataid}", out bool hasLock);
-                        if (mutex.WaitOne(MutexConfig.WORKFLOWLOCKTIMEOUT))
+                        var lockKey = $"{MutexConfig.WORKFLOWLOCKPRE}{fins.Dataid}";
+                        var success = ExeWithLock(lockKey, MutexConfig.WORKFLOWLOCKTIMEOUT, () =>
                         {
-                            try
-                            {
-                                ExeNextTask(fins, nextTasks);
-                                tran.Commit();
-                            }
-                            finally
-                            {
-                                mutex.ReleaseMutex();
-                            }
-                        }
-                        else
+                            ExeNextTask(fins, nextTasks);
+                            tran.Commit();
+                        });
+                        if (!success)
                         {
                             throw new Exception($"未获取独占锁，请重试，dataid：{fins.Dataid }");
                         }
@@ -198,6 +195,31 @@ namespace M.WFEngine.Flow
                 }
             }
         }
+
+        private bool ExeWithLock(string key, int timeout, Action action)
+        {
+            Mutex mutex = new Mutex(false, key, out bool hasLock);
+            if (mutex.WaitOne(timeout, false))
+            {
+                try
+                {
+                    action();
+                }
+                catch (Exception ex)
+                {
+                    _Logger.LogError(ex.Message, ex);
+                }
+                finally
+                {
+                    mutex.ReleaseMutex();
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         #endregion
 
         #region Callback
@@ -236,22 +258,15 @@ namespace M.WFEngine.Flow
 
                 //2、找下个任务节点，并流转，回调节点不应该有多个下个节点
                 //如果下一个节点是聚合节点，则需要加锁，防止与回调冲突。默认等待10S
-                if (nextTasks.Length == 1 && nextTasks[0].Type == ETaskType.JuHe)
+                if (nextTasks[0].Type == ETaskType.JuHe)
                 {
-                    Mutex mutex = new Mutex(false, $"{MutexConfig.WORKFLOWLOCKPRE}{fins.Dataid}", out bool hasLock);
-                    if (mutex.WaitOne(MutexConfig.WORKFLOWLOCKTIMEOUT))
-                    {
-                        try
+                    var lockKey = $"{MutexConfig.WORKFLOWLOCKPRE}{fins.Dataid}";
+                    var success = ExeWithLock(lockKey, MutexConfig.WORKFLOWLOCKTIMEOUT, () =>
                         {
                             ExeNextTask(fins, nextTasks);
                             tran.Commit();
-                        }
-                        finally
-                        {
-                            mutex.ReleaseMutex();
-                        }
-                    }
-                    else
+                        });
+                    if (!success)
                     {
                         throw new Exception($"未获取独占锁，请重试，dataid：{fins.Dataid }");
                     }
