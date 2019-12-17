@@ -42,7 +42,16 @@ namespace M.WFDesigner.Repository
             }
             return list;
         }
-
+        public List<WFServiceEntity> GetAllService()
+        {
+            var query = DataAccess.Query(WFServiceEntity.TableCode).FixField("id,name").WhereAll();
+            var services = query.QueryList<WFServiceEntity>().ToList();
+            if (services == null)
+            {
+                throw new Exception("没有找到场景信息业务");
+            }
+            return services;
+        }
         public WFFlowEntity GetWFTemplate(string flowId)
         {
             if (string.IsNullOrWhiteSpace(flowId))

@@ -1,5 +1,6 @@
 ﻿using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Provider;
+using M.WFDesigner.Model;
 using M.WFDesigner.Repository;
 using M.WorkFlow.Model;
 using System.Collections.Generic;
@@ -31,6 +32,21 @@ namespace M.WFDesigner.Service
             }
         }
 
+        [Routing(EHttpMethod.HttpPost, "wft/getallservcie")]
+        public CommonResult<Dictionary<string, ServicesAndFlowsEntity>> GetAllServcies()
+        {
+            Dictionary<string, ServicesAndFlowsEntity> serviceMap = new Dictionary<string, ServicesAndFlowsEntity>();
+            List<WFServiceEntity> services = this.WorkFlowTemplate.GetAllService();
+            foreach (var service in services)
+            {
+                ServicesAndFlowsEntity sfEntity = new ServicesAndFlowsEntity();
+                sfEntity.name = service.Name;
+                sfEntity.flows = this.WorkFlowTemplate.GetFlowsByServiceId(service.ID);
+                serviceMap.Add(service.ID, sfEntity);
+            }
+            return serviceMap;
+
+        }
         [Routing(EHttpMethod.HttpGet, "wft/getflowinfo")]
         public WFFlowEntity GetFlowInfo(string id)
         {

@@ -232,6 +232,10 @@ namespace M.WFEngine.Flow
             {
                 throw new Exception($"回调任务{mqId}不存在");
             }
+            if(eventEntity.ProcessDate == DateTime.MinValue)
+            {
+                throw new Exception($"回到任务会处理完毕，请稍后回调");
+            }
 
             var tinsEntity = _WFTask.GetTinsById(eventEntity.Tinsid);
             var taskEntity = _WFTask.GetTaskById(eventEntity.Taskid);

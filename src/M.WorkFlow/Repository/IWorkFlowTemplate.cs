@@ -25,6 +25,11 @@ namespace M.WFDesigner.Repository
         /// <returns></returns>
         List<WFFlowEntity> GetFlowsByServiceId(string serviceId);
         /// <summary>
+        /// 获取所有场景
+        /// </summary>
+        /// <returns></returns>
+        List<WFServiceEntity> GetAllService();
+        /// <summary>
         /// 发布流程
         /// </summary>
         /// <param name="flowId"></param>

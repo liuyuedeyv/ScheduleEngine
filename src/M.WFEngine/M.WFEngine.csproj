@@ -35,5 +35,9 @@
     <ProjectReference Include="..\..\..\..\code\FD.Component\FD.Component.RabbitMQ\src\FD.Component.ConsumeMQ\FD.Component.RabbitMQ.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Monitor\" />
+  </ItemGroup>
+
  
 </Project>
