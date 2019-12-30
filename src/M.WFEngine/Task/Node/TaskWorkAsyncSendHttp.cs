@@ -41,10 +41,21 @@ namespace M.WFEngine.Task
                         dicPostdata.Add("dataId", enventEntity.Dataid);
                         var content = new FormUrlEncodedContent(dicPostdata);
                         var httpClient = _httpClientFactory.CreateClient();
-                        var response = httpClient.PostAsync(item.Url, content).GetAwaiter().GetResult();
-                        if (response.IsSuccessStatusCode)
+                        try
                         {
-                            response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                            var response = httpClient.PostAsync(item.Url, content).GetAwaiter().GetResult();
+                            if (response.IsSuccessStatusCode)
+                            {
+                                response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                            }
+                            else
+                            {
+                                var a = "";
+                            }
+                        }
+                        catch (HttpRequestException ex)
+                        {
+                            throw new HttpRequestException($"{ex.Message}，RunTask url：{item.Url} content:{_jsonConverter.Serialize(dicPostdata) }");
                         }
                     }
                     return false;

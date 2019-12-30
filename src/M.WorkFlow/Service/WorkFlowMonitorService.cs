@@ -1,10 +1,9 @@
 ﻿using FD.Simple.DB;
-using FD.Simple.DB.Model;
 using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Provider;
 using M.WFDesigner.Repository;
 using M.WorkFlow.Model;
-using System.Collections.Generic;
+using System;
 
 namespace M.WFDesigner.Service
 {
@@ -20,14 +19,24 @@ namespace M.WFDesigner.Service
         [Routing(EHttpMethod.HttpPost, "wfm/getruningdata")]
         public CommonResult<DBCollection<WFFinsEntity>> GetFlowsByServiceIdo(WFMonitorSearchModel pageEntity)
         {
-            if (string.IsNullOrWhiteSpace(pageEntity.ServiceId))
+            if (pageEntity == null)
             {
-                return _workFlowMonitor.GetRuningData(pageEntity);
+                pageEntity = new WFMonitorSearchModel();
             }
-            else
+            pageEntity.PageSize = Math.Min(pageEntity.PageSize, 100);
+
+            return _workFlowMonitor.GetRuningData(pageEntity);
+        }
+
+        [Routing(EHttpMethod.HttpGet, "wfm/getwaitcallbackdata")]
+        public CommonResult<DBCollection<WFTEventEntity>> GetWaitCallbackData(string finsId)
+        {
+            if (string.IsNullOrWhiteSpace(finsId))
             {
-                return _workFlowMonitor.GetRuningDataByService(pageEntity);
+                return new WarnResult("finsId 不能为空");
             }
+
+            return _workFlowMonitor.GetWaitcallbackData(finsId);
         }
     }
 }

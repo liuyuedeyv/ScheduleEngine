@@ -8,6 +8,7 @@ using M.WFEngine.Util;
 using M.WorkFlow.Model;
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -69,7 +70,7 @@ namespace M.WFEngine.Flow
 
                 var nextTask = nextTasks[0];
                 var tinsNext = _WFTask.CreateTaskIns(fins, nextTask);
-                _WFTask.GetTaskInfo(nextTask).CreateJob(fins, tinsNext, nextTask.Type == ETaskType.WorkAsyncSendHttp);
+                _WFTask.GetTaskInfo(nextTask).CreateJob(fins, tinsNext, IsNeedCallback(nextTask.Type));
                 trans.Commit();
             }
             return 1;
@@ -106,7 +107,22 @@ namespace M.WFEngine.Flow
                     MaxDegreeOfParallelism = Environment.ProcessorCount
                 }, (job) =>
                 {
-                    Run(job);
+                    try
+                    {
+                        Run(job);
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        _Logger.LogError($"处理wftevent发升网络错误：{ex.Message}", ex);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex.InnerException != null)
+                        {
+                            _Logger.LogError($"处理wftevent发升错误InnerException：{ex.InnerException.Message}", ex.InnerException);
+                        }
+                        _Logger.LogError($"处理wftevent发升错误：{ex.Message}", ex);
+                    }
                 });
             return jobs.Count();
         }
@@ -191,7 +207,7 @@ namespace M.WFEngine.Flow
                 {
                     var tinsNext = _WFTask.CreateTaskIns(fins, nextTask);
                     var taskSetting = _WFTask.GetTaskInfo(nextTask);
-                    taskSetting.CreateJob(fins, tinsNext, nextTask.Type == ETaskType.WorkAsyncSendHttp);
+                    taskSetting.CreateJob(fins, tinsNext, IsNeedCallback(nextTask.Type));
                 }
             }
         }
@@ -232,7 +248,7 @@ namespace M.WFEngine.Flow
             {
                 throw new Exception($"回调任务{mqId}不存在");
             }
-            if(eventEntity.ProcessDate == DateTime.MinValue)
+            if (eventEntity.ProcessDate == DateTime.MinValue)
             {
                 throw new Exception($"回到任务会处理完毕，请稍后回调");
             }
@@ -282,6 +298,12 @@ namespace M.WFEngine.Flow
                 }
             }
             return 1;
+        }
+
+        private bool IsNeedCallback(ETaskType taskType)
+        {
+            return taskType == ETaskType.WorkAsyncSendHttp
+                  || taskType == ETaskType.WorkAsyncSendMQ;
         }
 
         #endregion

@@ -17,18 +17,35 @@ namespace M.WFDesigner.Repository
             this._db = db;
         }
 
-        public DBCollection<WFFinsEntity> GetRuningData(PageEntity searchModel)
+        public DBCollection<WFFinsEntity> GetRuningData(WFMonitorSearchModel searchModel)
         {
-            var filter = TableFilter.New().Equals("status", 1);
+            TableFilter filter = TableFilter.New().Equals("status", 1);
+            BuildFilter(filter, searchModel);
             var coll = GetRuningData(searchModel, filter);
             return coll;
         }
 
-        public DBCollection<WFFinsEntity> GetRuningDataByService(WFMonitorSearchModel searchModel)
+        public DBCollection<WFTEventEntity> GetWaitcallbackData(string finsId)
         {
-            var filter = TableFilter.New().Equals("status", 1).Equals("serviceid", searchModel.ServiceId);
-            var coll = GetRuningData(searchModel, filter);
-            return coll;
+            if (string.IsNullOrWhiteSpace(finsId))
+            {
+                return new DBCollection<WFTEventEntity>();
+            }
+            var filter = TableFilter.New().Equals("finsid", finsId).Equals("waitcallback", 1);
+            return _dataAccess.Query("wftevent").FixField("id,taskid,tinsid,processdate").Where(filter).Query<WFTEventEntity>();
+        }
+
+        private TableFilter BuildFilter(TableFilter filter, WFMonitorSearchModel searchModel)
+        {
+            if (!string.IsNullOrWhiteSpace(searchModel.DataId))
+            {
+                filter.Equals("dataid", searchModel.DataId);
+            }
+            else if (!string.IsNullOrWhiteSpace(searchModel.ServiceId))
+            {
+                filter.Equals("serviceid", searchModel.ServiceId);
+            }
+            return filter;
         }
 
         private DBCollection<WFFinsEntity> GetRuningData(PageEntity searchModel, TableFilter filter)

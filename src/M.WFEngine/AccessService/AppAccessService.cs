@@ -3,6 +3,7 @@ using FD.Simple.Utils;
 using FD.Simple.Utils.Agent;
 using M.WorkFlow.Model;
 using Newtonsoft.Json;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,17 +46,26 @@ namespace M.WFEngine.AccessService
                 ObjectCode = objectCode,
                 Body = objectCode
             };
-            var content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+            var postMsg = JsonConvert.SerializeObject(model);
+            var content = new StringContent(postMsg, Encoding.UTF8, "application/json");
 
             var url = GetAppAccessUrl(serviceId);
-            var result = await client.PostAsync(url, content);
-            if (result.IsSuccessStatusCode)
+            try
             {
-                return await result.Content.ReadAsStringAsync();
+                var result = await client.PostAsync(url, content);
+
+                if (result.IsSuccessStatusCode)
+                {
+                    return await result.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    return string.Empty;
+                }
             }
-            else
+            catch (HttpRequestException ex)
             {
-                return string.Empty;
+                throw new HttpRequestException($"{ex.Message}，GetRemoteBisdata url：{url} content:{postMsg}");
             }
         }
         /// <summary>
