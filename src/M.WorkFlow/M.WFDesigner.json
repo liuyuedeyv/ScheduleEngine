@@ -2,7 +2,7 @@
   "cmdtimeout": 5,
   "Apollo": {
   },
-  "fastdev": "server=10.50.135.121;database=fastdev;uid=root;pwd=1234.com;",
+  "fastdev": "server=10.50.132.188;port=6033;database=db_scheduler;uid=app_scheduler;pwd=1234.Com;sslmode=none;",
   "DBSetting": {
     "default": "fastdev",
     "fastdev": "FD.Simple.DB.DBContext.MySqlDBContext,FD.Simple.DB.MySql"

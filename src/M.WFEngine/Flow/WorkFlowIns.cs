@@ -13,14 +13,14 @@ namespace M.WFEngine.Flow
         public DataAccess _DataAccess { get; set; }
         #endregion
 
-        public WFFinsEntity CreatFlowInstance(string serviceId, string flowId, string dataId)
+        public WFFinsEntity CreatFlowInstance(string serviceId, string flowId, string dataId,string name)
         {
             WFFinsEntity fins = new WFFinsEntity();
             fins.Add();
             fins.ServiceId = serviceId;
             fins.Flowid = flowId;
             fins.Dataid = dataId;
-            fins.Name = dataId;
+            fins.Name = string.IsNullOrEmpty(name)?dataId:name;
             fins.Cdate = DateTime.Now;
             fins.Status = (int)EFlowStatus.Starting;
             _DataAccess.Update(fins);

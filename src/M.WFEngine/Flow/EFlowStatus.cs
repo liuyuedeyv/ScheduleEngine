@@ -16,6 +16,14 @@
         /// <summary>
         /// 结束
         /// </summary>
-        Completed = 2
+        Completed = 2,
+        /// <summary>
+        /// 流程异常
+        /// </summary>
+        Error = -1,
+        /// <summary>
+        /// 流程废弃
+        /// </summary>
+        GiveUp=4,
     }
 }
