@@ -1,0 +1,723 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>M.WFDesigner</name>
+    </assembly>
+    <members>
+        <member name="T:M.WFDesigner.RefData.ERefCachePre">
+            <summary>
+            缓存前缀
+            </summary> 
+        </member>
+        <member name="F:M.WFDesigner.RefData.ERefCachePre.WFS">
+            <summary>
+            WFService
+            </summary>
+        </member>
+        <member name="M:M.WFDesigner.RefData.RefdataRepository`1.DisableData(System.String)">
+            <summary>
+            失效缓存数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:M.WFDesigner.Repository.IWorkFlowInstance">
+            <summary>
+             流程实例相关
+            </summary>
+        </member>
+        <member name="M:M.WFDesigner.Repository.IWorkFlowInstance.GetTinsList(System.String)">
+            <summary>
+            获取任务节点实例信心
+            </summary>
+            <param name="insId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:M.WFDesigner.Repository.IWorkFlowMonitor">
+            <summary>
+            流程监控
+            </summary>
+        </member>
+        <member name="M:M.WFDesigner.Repository.IWorkFlowMonitor.GetRuningData(M.WFDesigner.Repository.WFMonitorSearchModel)">
+            <summary>
+            获取流程中的数据
+            </summary>
+            <param name="serviceId">流程服务ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:M.WFDesigner.Repository.IWorkFlowMonitor.GetWaitcallbackData(System.String)">
+            <summary>
+            根据流程实例id获取等待回调数据
+            </summary>
+            <param name="finsId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:M.WFDesigner.Repository.IWorkFlowMonitor.GetWFFinsExecInfo(System.String)">
+            <summary>
+            读取流程实例的运行情况
+            </summary>
+            <param name="finsId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:M.WFDesigner.Repository.IWorkFlowTemplate">
+            <summary>
+             流程模板相关
+            </summary>
+        </member>
+        <member name="M:M.WFDesigner.Repository.IWorkFlowTemplate.UpdateTemplate(M.WorkFlow.Model.WFFlowEntity)">
+            <summary>
+            更新流程模板
+            </summary>
+            <param name="flowEntity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:M.WFDesigner.Repository.IWorkFlowTemplate.GetWFTemplate(System.String)">
+            <summary>
+            根据流程id获取流程信息
+            </summary>
+            <param name="flowId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:M.WFDesigner.Repository.IWorkFlowTemplate.GetFlowsByServiceId(System.String)">
+            <summary>
+            根据流程服务id获取各个版本流程信息
+            </summary>
+            <param name="serviceId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:M.WFDesigner.Repository.IWorkFlowTemplate.GetAllService">
+            <summary>
+            获取所有场景
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:M.WFDesigner.Repository.IWorkFlowTemplate.ReleaseFlow(System.String)">
+            <summary>
+            发布流程
+            </summary>
+            <param name="flowId"></param>
+        </member>
+        <member name="M:M.WFDesigner.Repository.IWorkFlowTemplate.SetCurrentFow(System.String,System.String)">
+            <summary>
+            设置当前流程 
+            </summary>
+            <param name="flowId"></param>
+        </member>
+        <member name="P:M.WFDesigner.Repository.WFMonitorSearchModel.ServiceId">
+            <summary>
+            流程服务ID查询流程中数据
+            </summary>
+        </member>
+        <member name="P:M.WFDesigner.Repository.WFMonitorSearchModel.DataId">
+            <summary>
+            根据业务ID查询流程中数据
+            </summary>
+        </member>
+        <member name="P:M.WFDesigner.Repository.WFMonitorSearchModel.Name">
+            <summary>
+            流程名称
+            </summary>
+        </member>
+        <member name="P:M.WFDesigner.Repository.WFMonitorSearchModel.Status">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="M:M.WFDesigner.Service.WorkFlowMonitorService.GetFlowsByServiceIdo(M.WFDesigner.Repository.WFMonitorSearchModel)">
+            <summary>
+            读取正在运行的流程信息
+            </summary>
+            <param name="pageEntity"></param>
+            <returns></returns>
+        </member>
+        <member name="T:M.WorkFlow.Model.WFFinsEntity">
+            <summary>
+             流程实例扩展信息
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Name">
+            <summary>
+            申请内容
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Status">
+            <summary>
+            流程状态
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Ctaskid">
+            <summary>
+            当前任务节点
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Ctaskname">
+            <summary>
+            当前任务节点实例
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Flowid">
+            <summary>
+            工作流ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Dataid">
+            <summary>
+            业务表的主键字段值
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Ctaskmemo">
+            <summary>
+            任务节点
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Cmuser">
+            <summary>
+            当前处理人
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.ServiceId">
+            <summary>
+            业务模板ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Monitor">
+            <summary>
+            监控人
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Workname">
+            <summary>
+            流程名称
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Deadline">
+            <summary>
+            办理期限
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Officaldate">
+            <summary>
+            流程最终期限
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Cuser">
+            <summary>
+            启动人
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Cdate">
+            <summary>
+            申请时间
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Edate">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Lockflag">
+            <summary>
+            锁定标记
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.Topflag">
+            <summary>
+            置顶标记
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.WfFlow">
+            <summary>
+            流程信息 绘制流程用
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.LinkIns">
+            <summary>
+            流程执行连线实例
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFinsEntity.TaskIns">
+            <summary>
+            流程执行任务节点信息
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFlowEntity.Version">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFlowEntity.Released">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFlowEntity.ReleaseDate">
+            <summary>
+            发布时间
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFlowEntity.ServiceId">
+            <summary>
+            业务ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFlowEntity.Cdate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFlowEntity.Cuser">
+            <summary>
+            创建人
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFlowEntity.Istemplate">
+            <summary>
+            是否是流程模板
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFlowEntity.Baseflowid">
+            <summary>
+            如果是运行中修改的流程，则此字段会存储原版本流程id
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFlowEntity.Links">
+            <summary>
+            工作流连线
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFlowEntity.Tasks">
+            <summary>
+            工作流任务节点
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFFlowEntity.CurrentTag">
+            <summary>
+            当前流程
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFLinkEntity.Flowid">
+            <summary>
+            工作流ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFLinkEntity.Begintaskid">
+            <summary>
+            开始节点ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFLinkEntity.Endtaskid">
+            <summary>
+            结束节点ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFLinkEntity.Priority">
+            <summary>
+            优先级
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFLinkEntity.Memo">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFLinkEntity.Linetype">
+            <summary>
+            流转类型
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFLinkEntity.Xml">
+            <summary>
+            流转XML
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFLinkEntity.Filter">
+            <summary>
+            流转条件
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFLinkEntity.Updatefield">
+            <summary>
+            更新字段
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Ocmddis">
+            <summary>
+            处理命令
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Tag">
+            <summary>
+            标签
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Sdate">
+            <summary>
+            到岗时间
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Edate">
+            <summary>
+            处理时间
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Deadline">
+            <summary>
+            办理期限
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Lastalert">
+            <summary>
+            上次提醒时间
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Alarmnums">
+            <summary>
+            提醒次数
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Userid">
+            <summary>
+            处理人
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Omemo">
+            <summary>
+            处理意见
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Fuserid">
+            <summary>
+            来自于
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Ishasten">
+            <summary>
+            催办标记
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Flowid">
+            <summary>
+            工作流ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Finsid">
+            <summary>
+            工作流实例Id
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Taskid">
+            <summary>
+            任务节点Id
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Tinsid">
+            <summary>
+            任务节点实例Id
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Ocmd">
+            <summary>
+            处理命令
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFOinsEntity.Omemotype">
+            <summary>
+            意见类型
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFServiceEntity.Cdate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFServiceEntity.Cuser">
+            <summary>
+            创建人
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFServiceEntity.Name">
+            <summary>
+            申请内容
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFServiceEntity.Orderid">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFServiceEntity.Currentflowid">
+            <summary>
+            当前id
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFServiceEntity.WfappId">
+            <summary>
+            _WfappId
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTaskSettingEntity.DataTemplate">
+            <summary>
+            业务数据模板
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTaskSettingEntity.Jobs">
+            <summary>
+            节点名称
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTEventEntity.Flowid">
+            <summary>
+            工作流ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTEventEntity.Finsid">
+            <summary>
+            工作流ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTEventEntity.Dataid">
+            <summary>
+            工作流ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTEventEntity.Taskid">
+            <summary>
+            工作流ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTEventEntity.Tinsid">
+            <summary>
+            工作流ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTEventEntity.Status">
+            <summary>
+            工作流ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTEventEntity.Waitcallback">
+            <summary>
+            工作流ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTEventEntity.Cdate">
+            <summary>
+            工作流ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTEventEntity.ProcessDate">
+            <summary>
+            工作流ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTEventEntity.Callbackdate">
+            <summary>
+            工作流ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTEventMsgEntity.EventId">
+            <summary>
+            异步节点EventID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTEventMsgEntity.FinsId">
+            <summary>
+            一级经销商
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTEventMsgEntity.Remark">
+            <summary>
+            备注信息
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTEventMsgEntity.CDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTEventMsgEntity.RepairDate">
+            <summary>
+            修复时间
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTinsEntity.Deadline">
+            <summary>
+            办理期限
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTinsEntity.Sdate">
+            <summary>
+            开始时间
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTinsEntity.Edate">
+            <summary>
+            任务完成时间
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTinsEntity.Taskname">
+            <summary>
+            任务节点名称
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTinsEntity.Memo">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTinsEntity.Flowid">
+            <summary>
+            工作流Id
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTinsEntity.Finsid">
+            <summary>
+            工作流实例Id
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTinsEntity.Taskid">
+            <summary>
+            任务节点Id
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTinsEntity.Pretaskid">
+            <summary>
+            前任务节点Id
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTaskEntity.Flowid">
+            <summary>
+            工作流ID
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTaskEntity.Name">
+            <summary>
+            节点名称
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTaskEntity.Setting">
+            <summary>
+            settingjson
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTaskEntity.Datatemplate">
+            <summary>
+            Datatemplate
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTaskEntity.Filter">
+            <summary>
+            处理人FILTER
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTaskEntity.Colex">
+            <summary>
+            可处理字段
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTaskEntity.Approve">
+            <summary>
+            审批意见格式
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTaskEntity.Opertype">
+            <summary>
+            处理方式
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTaskEntity.Memo">
+            <summary>
+            备注信息
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTaskEntity.Y">
+            <summary>
+            TOP
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTaskEntity.X">
+            <summary>
+            LEFT
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTaskEntity.Baseid">
+            <summary>
+            baseid
+            </summary>
+        </member>
+        <member name="P:M.WorkFlow.Model.WFTaskEntity.Type">
+            <summary>
+            节点类型
+            </summary>
+        </member>
+        <member name="F:M.WorkFlow.Model.ETaskType.Start">
+            <summary>
+            开始节点
+            </summary>
+        </member>
+        <member name="F:M.WorkFlow.Model.ETaskType.End">
+            <summary>
+            结束节点
+            </summary>
+        </member>
+        <member name="F:M.WorkFlow.Model.ETaskType.Work">
+            <summary>
+            普通任务节点
+            </summary>
+        </member>
+        <member name="F:M.WorkFlow.Model.ETaskType.WorkAsyncSendHttp">
+            <summary>
+            异步任务发起http请求
+            </summary>
+        </member>
+        <member name="F:M.WorkFlow.Model.ETaskType.BingXing">
+            <summary>
+            并行节点
+            </summary>
+        </member>
+        <member name="F:M.WorkFlow.Model.ETaskType.JuHe">
+            <summary>
+            聚合节点
+            </summary>
+        </member>
+        <member name="F:M.WorkFlow.Model.ETaskType.Model">
+            <summary>
+            决策节点
+            </summary>
+        </member>
+        <member name="F:M.WorkFlow.Model.ETaskType.WorkAsyncSendMQ">
+            <summary>
+            异步任务发送MQ
+            </summary>
+        </member>
+        <member name="T:M.WFEngine.Flow.EFlowStatus">
+            <summary>
+            流程状态
+            </summary>
+        </member>
+        <member name="F:M.WFEngine.Flow.EFlowStatus.NotStarted">
+            <summary>
+            草稿状态
+            </summary>
+        </member>
+        <member name="F:M.WFEngine.Flow.EFlowStatus.Starting">
+            <summary>
+            运行中
+            </summary>
+        </member>
+        <member name="F:M.WFEngine.Flow.EFlowStatus.Completed">
+            <summary>
+            结束
+            </summary>
+        </member>
+        <member name="F:M.WFEngine.Flow.EFlowStatus.Error">
+            <summary>
+            流程异常
+            </summary>
+        </member>
+    </members>
+</doc>

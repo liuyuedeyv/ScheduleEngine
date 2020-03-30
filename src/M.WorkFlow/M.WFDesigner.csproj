@@ -5,10 +5,15 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath></OutputPath>
+    <DocumentationFile>E:\GitProject\ScheduleEngine\src\M.WorkFlow\M.WFDesigner.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="M.WFDesigner.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\M.WFEngine\Flow\EFlowStatus.cs" Link="Repository\Model\EFlowStatus.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +25,12 @@
 
   <ItemGroup>
     <PackageReference Include="FD.Component.DB" Version="1.1.8.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="M.WFDesigner.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

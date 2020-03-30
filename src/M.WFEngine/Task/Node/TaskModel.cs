@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using M.WFEngine.Flow.DAL;
+using M.WFEngine.Task.DAL;
 
 namespace M.WFEngine.Task
 {
@@ -23,6 +25,14 @@ namespace M.WFEngine.Task
             _jsonConverter = jsonConverter;
         }
 
+        [Autowired] //              
+        private WfTdataDal _WfTdataDal { get; set; }
+
+        [Autowired] //              
+        private WfFinsDal _WfFinsDal { get; set; }
+
+        [Autowired] //              
+        private WfTinsDal _WftinsDal { get; set; }
         public override ETaskType TaskType => ETaskType.Model;
         public override string GetBisData(WFTaskEntity taskEntity, string dataId, string serviceId, EAccessMessageType messageType)
         {
@@ -30,21 +40,17 @@ namespace M.WFEngine.Task
             string jsonData = "{}";
             if (!string.IsNullOrWhiteSpace(taskEntity.Setting))
             {
+                var finisid = this._WfFinsDal.GetIdByDataIdAndFlowId(dataId,taskEntity.Flowid);
+                var tinsid = this._WftinsDal.GetIdByFinsIdAndTaskId(finisid, taskEntity.ID);
+
                 var settingModel = _jsonConverter.Deserialize<ObjectSettingModel>(taskEntity.Setting);
                 if (settingModel != null)
                 {
                     jsonData = _IAppAccessService.GetModelTaskBisdata(serviceId, dataId, settingModel.ObjectCode).GetAwaiter().GetResult();
 
                 }
-                WFTDataEntity dataEntity = new WFTDataEntity();
-                dataEntity.State = EDBEntityState.Added;
-                dataEntity.Flowid = taskEntity.Flowid;
-                dataEntity.Finsid = "";
-                dataEntity.Taskid = taskEntity.ID;
-                dataEntity.Tinsid = "";
-                dataEntity.Cdate = System.DateTime.Now;
-                dataEntity.JsonData = jsonData;
-                _DataAccess.Update(dataEntity);
+                _WfTdataDal.Add(taskEntity.Flowid,finisid, taskEntity.ID,tinsid, jsonData);
+               
             }
             return jsonData;
         }

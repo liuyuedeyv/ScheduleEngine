@@ -11,7 +11,7 @@ namespace M.WFEngine.Flow
         /// <param name="flowId"></param>
         /// <param name="dataId"></param>
         /// <returns></returns>
-        WFFinsEntity CreatFlowInstance(string serviceId, string flowId, string dataId);
+        WFFinsEntity CreatFlowInstance(string serviceId, string flowId, string dataId,string name);
         /// <summary>
         /// 获取流程实例信息
         /// </summary>

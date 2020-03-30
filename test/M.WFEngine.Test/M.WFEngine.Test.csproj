@@ -1,0 +1,105 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Elasticsearch.Net" Version="6.4.0" />
+    <PackageReference Include="Exceptionless" Version="4.3.2022" />
+    <PackageReference Include="Exceptionless.AspNetCore" Version="4.3.2012" />
+    <PackageReference Include="FastDFS.Client" Version="1.0.6" />
+    <PackageReference Include="FD.Component.DB" Version="1.2.1" />
+    <PackageReference Include="FD.Component.FastDFS" Version="1.1.1" />
+    <PackageReference Include="FD.Component.Log" Version="1.0.2" />
+    <PackageReference Include="FD.Component.RabbitMQ" Version="1.3.2" />
+    <PackageReference Include="FD.Simple.DB" Version="1.2.1" />
+    <PackageReference Include="FD.Simple.DB.MySql" Version="1.1.8.8" />
+    <PackageReference Include="FD.Simple.DB.Oracle" Version="1.1.8.8" />
+    <PackageReference Include="FD.Simple.DB.Pg" Version="1.1.8.8" />
+    <PackageReference Include="FD.Simple.Utils" Version="1.9.4" />
+    <PackageReference Include="GW.ApiLoader.TestUtils" Version="1.3.8.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="2.1.6" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.3.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="dll\FastDFS.Client.deps.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\FastDFS.Client.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\FD.Component.DB.deps.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\FD.Component.DB.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\FD.Component.FastDFS.deps.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\FD.Component.FastDFS.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\FD.Component.Log.deps.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\FD.Component.Log.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\FD.Component.RabbitMQ.deps.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\FD.Component.RabbitMQ.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\FD.Component.ServiceInvocation.deps.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\FD.Component.ServiceInvocation.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\FD.Simple.Common.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\FD.Simple.DB.MySql.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\FD.Simple.DB.Oracle.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\FD.Simple.DB.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="dll\FD.Simple.DB.Pg.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Application\" />
+    <Folder Include="Repository\" />
+    <Folder Include="Share\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\M.WFEngine\M.WFEngine.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,21 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\M.WorkFlow\Model\auto\WFFinsEntity.cs" Link="Model\auto\WFFinsEntity.cs" />
-    <Compile Include="..\M.WorkFlow\Model\auto\WFFlowEntity.cs" Link="Model\auto\WFFlowEntity.cs" />
-    <Compile Include="..\M.WorkFlow\Model\auto\WFLinkEntity.cs" Link="Model\auto\WFLinkEntity.cs" />
-    <Compile Include="..\M.WorkFlow\Model\auto\WFOinsEntity.cs" Link="Model\auto\WFOinsEntity.cs" />
-    <Compile Include="..\M.WorkFlow\Model\auto\WFServiceEntity.cs" Link="Model\auto\WFServiceEntity.cs" />
-    <Compile Include="..\M.WorkFlow\Model\auto\WFTaskSettingEntity.cs" Link="Model\auto\WFTaskSettingEntity.cs" />
-    <Compile Include="..\M.WorkFlow\Model\auto\WFTEventEntity.cs" Link="Model\auto\WFTEventEntity.cs" />
-    <Compile Include="..\M.WorkFlow\Model\auto\WFTinsEntity.cs" Link="Model\auto\WFTinsEntity.cs" />
-    <Compile Include="..\M.WorkFlow\Model\auto\WTaskEntity.cs" Link="Model\auto\WTaskEntity.cs" />
-    <Compile Include="..\M.WorkFlow\Model\ETaskType.cs" Link="Model\ETaskType.cs" />
-    <Compile Include="..\M.WorkFlow\Model\WTaskEntity.cs" Link="Model\WTaskEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Repository\Model\auto\WFFinsEntity.cs" Link="Model\auto\WFFinsEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Repository\Model\auto\WFFlowEntity.cs" Link="Model\auto\WFFlowEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Repository\Model\auto\WFLinkEntity.cs" Link="Model\auto\WFLinkEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Repository\Model\auto\WFOinsEntity.cs" Link="Model\auto\WFOinsEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Repository\Model\auto\WFServiceEntity.cs" Link="Model\auto\WFServiceEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Repository\Model\auto\WFTaskSettingEntity.cs" Link="Model\auto\WFTaskSettingEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Repository\Model\auto\WFTEventEntity.cs" Link="Model\auto\WFTEventEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Repository\Model\auto\WFTEventMsgEntity.cs" Link="Model\auto\WFTEventMsgEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Repository\Model\auto\WFTinsEntity.cs" Link="Model\auto\WFTinsEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Repository\Model\auto\WTaskEntity.cs" Link="Model\auto\WTaskEntity.cs" />
+    <Compile Include="..\M.WorkFlow\Repository\Model\ETaskType.cs" Link="Model\ETaskType.cs" />
+    <Compile Include="..\M.WorkFlow\Repository\Model\WTaskEntity.cs" Link="Model\WTaskEntity.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,12 +28,9 @@
 
   <ItemGroup>
     <PackageReference Include="FD.Component.DB" Version="1.1.8.5" />
+    <PackageReference Include="FD.Component.RabbitMQ" Version="1.3.2" />
     <PackageReference Include="FD.Simple.Utils" Version="1.9.4" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="2.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\code\FD.Component\FD.Component.RabbitMQ\src\FD.Component.ConsumeMQ\FD.Component.RabbitMQ.csproj" />
   </ItemGroup>
 
   <ItemGroup>

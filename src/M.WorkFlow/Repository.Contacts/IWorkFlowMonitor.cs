@@ -1,4 +1,6 @@
-﻿using FD.Simple.DB;
+﻿using System.Collections.Generic;
+using FD.Simple.DB;
+using FD.Simple.Utils.Provider;
 using M.WorkFlow.Model;
 
 namespace M.WFDesigner.Repository
@@ -21,5 +23,11 @@ namespace M.WFDesigner.Repository
         /// <param name="finsId"></param>
         /// <returns></returns>
         DBCollection<WFTEventEntity> GetWaitcallbackData(string finsId);
+        /// <summary>
+        /// 读取流程实例的运行情况
+        /// </summary>
+        /// <param name="finsId"></param>
+        /// <returns></returns>
+        WFFinsEntity GetWFFinsExecInfo(string finsId);
     }
 }

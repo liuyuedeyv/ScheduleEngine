@@ -10,7 +10,7 @@ namespace M.WFEngine.Util
     public static class DynamicLambda
     {
         /// <summary>
-        /// 根据tablfiter 查询数据
+        /// 根据tablefilter 查询数据
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="data"></param>
@@ -160,7 +160,6 @@ namespace M.WFEngine.Util
                 var mediateExpr = Expression.Convert(instanceExpr, typeof(object));
                 return Expression.Convert(mediateExpr, targetType);
             }
-            throw new Exception("表达式错误");
         }
     }
 }

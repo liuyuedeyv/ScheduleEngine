@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace M.WFDesigner.Repository
 {
+    /// <summary>
+    ///  流程模板相关
+    /// </summary>
     public interface IWorkFlowTemplate
     {
         /// <summary>

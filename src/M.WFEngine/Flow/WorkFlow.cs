@@ -11,6 +11,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using FD.Simple.Utils.Provider;
+using M.WFEngine.DAL;
+using M.WFEngine.Flow.DAL;
 
 namespace M.WFEngine.Flow
 {
@@ -32,10 +35,16 @@ namespace M.WFEngine.Flow
 
         [Autowired]
         public IFDLogger _Logger { get; set; }
+
+        [Autowired] //              
+        private WfTEventDal _WfTEventDal { get; set; }
+
+        [Autowired] //              
+        private WfFinsDal _WfFinsDal { get; set; }
         #endregion
 
         #region Start
-        public int Start(string serviceId, string dataId)
+        public int Start(string serviceId, string dataId,string name)
         {
             var filter = TableFilter.New().Equals("status", 0);
 
@@ -55,7 +64,7 @@ namespace M.WFEngine.Flow
             using (var trans = TransHelper.BeginTrans())
             {
                 //1、创建流程实例、开始节点实例，执行开始节点任务
-                var fins = _WorkFlowIns.CreatFlowInstance(serviceEntity.ID, serviceEntity.Currentflowid, dataId);
+                var fins = _WorkFlowIns.CreatFlowInstance(serviceEntity.ID, serviceEntity.Currentflowid, dataId,name);
                 var tinsStart = _WFTask.CreateTaskIns(fins, startTask);
                 var startTaskSetting = _WFTask.GetTaskInfo(startTask);
                 startTaskSetting.RunTask(startTask, fins, tinsStart, null);
@@ -126,6 +135,8 @@ namespace M.WFEngine.Flow
                 });
             return jobs.Count();
         }
+
+
         private int Run(WFTEventEntity eventEntity)
         {
             var taskEntity = _WFTask.GetTaskById(eventEntity.Taskid);
@@ -306,6 +317,113 @@ namespace M.WFEngine.Flow
                   || taskType == ETaskType.WorkAsyncSendMQ;
         }
 
+        #endregion
+
+        #region CallbackForTaskError
+        /// <summary>
+        /// 回调任务并注册错误信息
+        /// </summary>
+        /// <param name="mqId"></param>
+        /// <param name="errorMsg"></param>
+        /// <returns></returns>
+        public int CallbackForTaskError(string mqId, string errorMsg)
+        {
+            var filter = TableFilter.New().Equals("id", mqId);
+            var eventEntity = _DataAccess.Query(WFTEventEntity.TableCode).FixField("*").Where(filter).QueryFirst<WFTEventEntity>();
+
+            if (eventEntity == null)
+            {
+                throw new Exception($"回调任务{mqId}不存在");
+            }
+            //判断任务节点状态是否正确
+            if (eventEntity.Waitcallback == 0)
+            {
+                throw new Exception($"回调任务{mqId}已经回调,无法继续处理");
+            }
+            if (eventEntity.Status == -1)
+            {
+                throw new Exception($"回调任务{mqId}已标记为异常,请尝试修复");
+            }
+
+            //插入  异常消息
+            var flowEntity = _DataAccess.Query(WFFinsEntity.TableCode).FixField("ID,STATUS").Where(TableFilter.New().Equals("ID",eventEntity.Finsid)).QueryFirst<WFFinsEntity>();
+
+
+            using (var tran = TransHelper.BeginTrans())
+            {
+                //流程实例更新为失败
+                flowEntity.Status = -1;
+                _DataAccess.Update(flowEntity);
+                //1、更新任务实例状态
+                eventEntity.State = EDBEntityState.Modified;
+                eventEntity.Status = -1; //标记失败
+                _DataAccess.Update(eventEntity);
+                //写入event异常日志
+                WFTEventMsgEntity en = _DataAccess.GetNewEntity<WFTEventMsgEntity>(); 
+                en.EventId = mqId;
+                en.CDate=DateTime.Now;
+                en.Remark = errorMsg;
+                en.RepairDate = new DateTime(9999,12,31);
+                en.FinsId = flowEntity.ID;
+                _DataAccess.Update(en);
+                
+                tran.Commit();
+            }
+            return 1;
+        }
+
+
+        #endregion
+
+        #region 废弃流程
+        /// <summary>
+        /// 流程废弃
+        /// </summary>
+        /// <param name="mqId"></param>
+        /// <returns></returns>
+        public CommonResult<int> GiveUp(string mqId,string reason)
+        {
+            //根据MQID
+            var en = this._WfTEventDal.Get(mqId);
+
+            if (en == null)
+            {
+                return new WarnResult($"回调任务{mqId}不存在");
+            }
+            //判断任务节点状态是否正确
+            if (en.Waitcallback == 0)
+            {
+                return new WarnResult($"回调任务{mqId}已经回调,无法继续处理");
+            }
+            
+
+            var enFins = this._WfFinsDal.Get(en.Finsid);
+             
+            if (enFins==null)
+            {
+                return new WarnResult("未找到此流程");
+            }
+            if (!(enFins.Status == (int)EFlowStatus.Starting|| enFins.Status == (int)EFlowStatus.Error))
+            {
+                return new WarnResult("非审批中的流程不能废弃!"); 
+            }
+              
+            using (var tran=TransHelper.BeginTrans())
+            {
+                var num=this._DataAccess.Update(WFFinsEntity.TableCode).Set("Status", (int)EFlowStatus.GiveUp).Where(TableFilter.New().Equals("ID", enFins.ID)).ExecuteNonQuery();
+                if (num > 0)
+                {
+                    this._DataAccess.Update(WFTinsEntity.TableCode)
+                        .Set("EDATE", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
+                        .Set("Memo", $"因为[{reason}]废弃流程")
+                        .Where(TableFilter.New().Equals("FinsId", enFins.ID).IsNull("EDATE"))
+                        .ExecuteNonQuery();
+                }
+                tran.Commit();
+            } 
+
+            return 1;
+        }
         #endregion
     }
 }

@@ -2,11 +2,10 @@
 using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Serialize;
 using M.WFEngine.AccessService;
-using M.WFEngine.Service;
+using M.WFEngine.Flow.DAL;
 using M.WFEngine.Util;
 using M.WorkFlow.Model;
-using System.Linq;
-using System.Net.Http;
+using M.WFEngine.Task.DAL;
 
 namespace M.WFEngine.Task
 {
@@ -21,6 +20,15 @@ namespace M.WFEngine.Task
         public IAppAccessService _IAppAccessService { get; set; }
 
         public abstract ETaskType TaskType { get; }
+
+        [Autowired] //              
+        public WfTdataDal _WfTdataDal { get; set; }
+
+        [Autowired] //              
+        public WfFinsDal _WfFinsDal { get; set; }
+
+        [Autowired] //              
+        public WfTinsDal _WftinsDal { get; set; }
 
         /// <summary>
         /// 执行具体任务
@@ -38,6 +46,11 @@ namespace M.WFEngine.Task
         {
             //调取远方模型进行，返回结果
             string jsonData = string.Empty;
+            //根据serviceId 和dataid 获取 finsid 和tinsid
+
+            var finisid = this._WfFinsDal.GetIdByDataIdAndFlowId(dataId, taskEntity.Flowid);
+            var tinsid = this._WftinsDal.GetIdByFinsIdAndTaskId(finisid, taskEntity.ID);
+            
             if (messageType == EAccessMessageType.GetVariable)
             {
                 jsonData = _IAppAccessService.GetVaribleTaskBisdata(serviceId, dataId, taskEntity.GetTemplateInfo()).GetAwaiter().GetResult();
@@ -45,18 +58,9 @@ namespace M.WFEngine.Task
             else
             {
                 jsonData = _IAppAccessService.GetWorkflowServiceBisdata(serviceId, dataId).GetAwaiter().GetResult();
-            }
-
-            WFTDataEntity dataEntity = new WFTDataEntity();
-            dataEntity.State = EDBEntityState.Added;
-            dataEntity.Flowid = taskEntity.Flowid;
-            //dataEntity.Finsid = fins.ID;
-            dataEntity.Taskid = taskEntity.ID;
-            //dataEntity.Tinsid = tinsEntity.ID;
-            dataEntity.Cdate = System.DateTime.Now;
-            dataEntity.JsonData = jsonData;
-            _DataAccess.Update(dataEntity);
-
+            } 
+            _WfTdataDal.Add(taskEntity.Flowid,finisid, taskEntity.ID,tinsid, jsonData); 
+          
             return jsonData;
         }
 
