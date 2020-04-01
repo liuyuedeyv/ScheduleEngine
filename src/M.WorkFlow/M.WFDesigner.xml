@@ -719,5 +719,10 @@
             流程异常
             </summary>
         </member>
+        <member name="F:M.WFEngine.Flow.EFlowStatus.GiveUp">
+            <summary>
+            流程废弃
+            </summary>
+        </member>
     </members>
 </doc>

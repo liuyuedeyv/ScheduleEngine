@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "M.WFDesigner": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\dotnet\\dotnet.exe",
+      "commandLineArgs": "GW.ApiLoader.dll",
+      "workingDirectory": "$(ProjectDir)\\bin\\$(ConfigurationName)\\netcoreapp2.1"
+    }
+  }
+}
