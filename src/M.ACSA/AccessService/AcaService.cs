@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace M.ACSA.AccessService
 {
 
-    public class AcaService : BaseFoo
+    public class AcaService 
     {
         [Autowired]
         public IEnumerable<IWfServiceMessage> _WfMessageService { get; set; }

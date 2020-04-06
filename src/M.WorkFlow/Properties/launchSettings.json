@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "M.WFDesigner": {
+      "commandName": "Project"
+    },
+    "apiloader": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\dotnet\\dotnet.exe",
+      "commandLineArgs": "GW.ApiLoader.dll module=M.WFDesigner"
+    }
+  }
+}

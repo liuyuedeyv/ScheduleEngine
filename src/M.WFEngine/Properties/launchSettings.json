@@ -22,6 +22,11 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:58258/"
+    },
+    "Apiloader": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\dotnet\\dotnet.exe",
+      "commandLineArgs": "GW.ApiLoader.dll"
     }
   }
 }

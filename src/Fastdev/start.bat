@@ -1,0 +1,1 @@
+﻿dotnet Fastdev.dll --server.urls=http://*:5000

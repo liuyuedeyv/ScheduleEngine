@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -24,11 +24,36 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FD.Component.DB" Version="1.1.8.5" />
+    <PackageReference Include="FD.Component.DB.MySql" Version="1.3.1" />
+    <PackageReference Include="GW.ApiLoader" Version="2.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="C:\Users\ushishuai\.nuget\packages\gw.apiloader\2.0.3\contentFiles\any\netcoreapp2.1\appsettings.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ushishuai\.nuget\packages\gw.apiloader\2.0.3\contentFiles\any\netcoreapp2.1\appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ushishuai\.nuget\packages\gw.apiloader\2.0.3\contentFiles\any\netcoreapp2.1\global.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ushishuai\.nuget\packages\gw.apiloader\2.0.3\contentFiles\any\netcoreapp2.1\GW.ApiLoader.deps.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ushishuai\.nuget\packages\gw.apiloader\2.0.3\contentFiles\any\netcoreapp2.1\GW.ApiLoader.runtimeconfig.dev.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="C:\Users\ushishuai\.nuget\packages\gw.apiloader\2.0.3\contentFiles\any\netcoreapp2.1\GW.ApiLoader.runtimeconfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <None Update="M.WFDesigner.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="start.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

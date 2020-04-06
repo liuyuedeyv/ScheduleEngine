@@ -17,4 +17,10 @@
     <None Include="wwwroot\lib\jsplumb\main.css" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="start.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

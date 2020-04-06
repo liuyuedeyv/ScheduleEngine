@@ -1,6 +1,5 @@
 ﻿using FD.Simple.DB;
 using FD.Simple.Utils.Agent;
-using FD.Simple.Utils.Logging;
 using FD.Simple.Utils.Serialize;
 using M.WFEngine.AccessService;
 using M.WFEngine.Task;
@@ -14,6 +13,10 @@ using System.Threading.Tasks;
 using FD.Simple.Utils.Provider;
 using M.WFEngine.DAL;
 using M.WFEngine.Flow.DAL;
+using Microsoft.Extensions.Logging;
+using System.Data.Common;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace M.WFEngine.Flow
 {
@@ -34,7 +37,7 @@ namespace M.WFEngine.Flow
         public IJsonConverter _JsonConverter { get; set; }
 
         [Autowired]
-        public IFDLogger _Logger { get; set; }
+        public ILogger<WorkFlow> _Logger { get; set; }
 
         [Autowired] //              
         private WfTEventDal _WfTEventDal { get; set; }
@@ -44,7 +47,7 @@ namespace M.WFEngine.Flow
         #endregion
 
         #region Start
-        public int Start(string serviceId, string dataId,string name)
+        public int Start(string serviceId, string dataId, string name)
         {
             var filter = TableFilter.New().Equals("status", 0);
 
@@ -64,7 +67,7 @@ namespace M.WFEngine.Flow
             using (var trans = TransHelper.BeginTrans())
             {
                 //1、创建流程实例、开始节点实例，执行开始节点任务
-                var fins = _WorkFlowIns.CreatFlowInstance(serviceEntity.ID, serviceEntity.Currentflowid, dataId,name);
+                var fins = _WorkFlowIns.CreatFlowInstance(serviceEntity.ID, serviceEntity.Currentflowid, dataId, name);
                 var tinsStart = _WFTask.CreateTaskIns(fins, startTask);
                 var startTaskSetting = _WFTask.GetTaskInfo(startTask);
                 startTaskSetting.RunTask(startTask, fins, tinsStart, null);
@@ -104,12 +107,27 @@ namespace M.WFEngine.Flow
         #region ProcessWftEvent
         public int ProcessWftEvent(uint batchCount)
         {
+
+
+
             var filter = TableFilter.New().Equals("status", 0);//.Equals("waitcallback", 0);
                                                                //#if DEBUG
                                                                //            filter = TableFilter.New().Equals("status", 0).Equals("flowid", "00001F493WJRC0000A01");
                                                                //#endif
-            var jobs = _DataAccess.Query(WFTEventEntity.TableCode).FixField("*").Paging(1, batchCount).Where(filter).QueryList<WFTEventEntity>();
-
+            IEnumerable<WFTEventEntity> jobs = null;
+            try
+            {
+                jobs = _DataAccess.Query(WFTEventEntity.TableCode).FixField("*").Paging(1, batchCount).Where(filter).QueryList<WFTEventEntity>();
+            }
+            catch (DbException ex)
+            {
+                _Logger.LogError(ex, "查询wftevent发生错误");
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             Parallel.ForEach<WFTEventEntity>(jobs,
                 new ParallelOptions()
                 {
@@ -346,7 +364,7 @@ namespace M.WFEngine.Flow
             }
 
             //插入  异常消息
-            var flowEntity = _DataAccess.Query(WFFinsEntity.TableCode).FixField("ID,STATUS").Where(TableFilter.New().Equals("ID",eventEntity.Finsid)).QueryFirst<WFFinsEntity>();
+            var flowEntity = _DataAccess.Query(WFFinsEntity.TableCode).FixField("ID,STATUS").Where(TableFilter.New().Equals("ID", eventEntity.Finsid)).QueryFirst<WFFinsEntity>();
 
 
             using (var tran = TransHelper.BeginTrans())
@@ -359,14 +377,14 @@ namespace M.WFEngine.Flow
                 eventEntity.Status = -1; //标记失败
                 _DataAccess.Update(eventEntity);
                 //写入event异常日志
-                WFTEventMsgEntity en = _DataAccess.GetNewEntity<WFTEventMsgEntity>(); 
+                WFTEventMsgEntity en = _DataAccess.GetNewEntity<WFTEventMsgEntity>();
                 en.EventId = mqId;
-                en.CDate=DateTime.Now;
+                en.CDate = DateTime.Now;
                 en.Remark = errorMsg;
-                en.RepairDate = new DateTime(9999,12,31);
+                en.RepairDate = new DateTime(9999, 12, 31);
                 en.FinsId = flowEntity.ID;
                 _DataAccess.Update(en);
-                
+
                 tran.Commit();
             }
             return 1;
@@ -381,7 +399,7 @@ namespace M.WFEngine.Flow
         /// </summary>
         /// <param name="mqId"></param>
         /// <returns></returns>
-        public CommonResult<int> GiveUp(string mqId,string reason)
+        public CommonResult<int> GiveUp(string mqId, string reason)
         {
             //根据MQID
             var en = this._WfTEventDal.Get(mqId);
@@ -395,22 +413,22 @@ namespace M.WFEngine.Flow
             {
                 return new WarnResult($"回调任务{mqId}已经回调,无法继续处理");
             }
-            
+
 
             var enFins = this._WfFinsDal.Get(en.Finsid);
-             
-            if (enFins==null)
+
+            if (enFins == null)
             {
                 return new WarnResult("未找到此流程");
             }
-            if (!(enFins.Status == (int)EFlowStatus.Starting|| enFins.Status == (int)EFlowStatus.Error))
+            if (!(enFins.Status == (int)EFlowStatus.Starting || enFins.Status == (int)EFlowStatus.Error))
             {
-                return new WarnResult("非审批中的流程不能废弃!"); 
+                return new WarnResult("非审批中的流程不能废弃!");
             }
-              
-            using (var tran=TransHelper.BeginTrans())
+
+            using (var tran = TransHelper.BeginTrans())
             {
-                var num=this._DataAccess.Update(WFFinsEntity.TableCode).Set("Status", (int)EFlowStatus.GiveUp).Where(TableFilter.New().Equals("ID", enFins.ID)).ExecuteNonQuery();
+                var num = this._DataAccess.Update(WFFinsEntity.TableCode).Set("Status", (int)EFlowStatus.GiveUp).Where(TableFilter.New().Equals("ID", enFins.ID)).ExecuteNonQuery();
                 if (num > 0)
                 {
                     this._DataAccess.Update(WFTinsEntity.TableCode)
@@ -420,7 +438,7 @@ namespace M.WFEngine.Flow
                         .ExecuteNonQuery();
                 }
                 tran.Commit();
-            } 
+            }
 
             return 1;
         }

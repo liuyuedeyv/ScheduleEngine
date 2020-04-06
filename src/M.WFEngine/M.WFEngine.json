@@ -2,17 +2,18 @@
   "cmdtimeout": 5,
   "Apollo": {
   },
-  "fastdev": "server=10.50.132.188;port=6033;database=db_scheduler;uid=app_scheduler;pwd=1234.Com;sslmode=none;",
+  //"fastdev": "server=192.168.0.168;port=3308;database=wf;uid=root;pwd=123456;sslmode=none;",
+  "fastdev": "server=127.0.0.1;port=3306;database=wf;uid=root;pwd=1234.com;sslmode=none;",
   "DBSetting": {
     "default": "fastdev",
-    "fastdev": "FD.Simple.DB.DBContext.MySqlDBContext,FD.Simple.DB.MySql"
+    "fastdev": "FD.Component.DB.MySql.MySqlDBContext,FD.Component.DB.MySql"
   },
+  "mq168": "amqp://admin:admin@192.168.0.168:5672/my_vhost",
   "mq161": "amqp://administrator:1234.com@10.50.132.161:5672//",
   "mq3_acsa": "amqp://acsauser:1234.com@10.50.132.161:5672/acsa",
   "mq3_btn": "amqp://administrator:1234.com@10.50.132.161:5672/AAP",
   "MQSetting": {
-    "default": "mq161",
-    "servers": "mq161,mq3_acsa,mq3_btn"
-  },
-  "SkyWalking": "10.50.135.211:11800"
+    "default": "mq168",
+    "servers": "mq168"
+  }
 }

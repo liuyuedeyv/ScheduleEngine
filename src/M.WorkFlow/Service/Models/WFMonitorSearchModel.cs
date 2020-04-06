@@ -1,6 +1,8 @@
-﻿namespace M.WFDesigner.Repository
+﻿using FD.Simple.Utils.Agent;
+
+namespace M.WFDesigner.Repository
 {
-    public class WFMonitorSearchModel : FD.Simple.DB.Model.PageEntity
+    public class WFMonitorSearchModel : PageEntity
     {
         /// <summary>
         /// 流程服务ID查询流程中数据
@@ -18,5 +20,13 @@
         /// 状态
         /// </summary>
         public int? Status { get; set; }
+    }
+
+
+    public class PageEntity : IFooParameter
+    {
+        public uint PageIndex { get; set; }
+
+        public uint PageSize { get; set; }
     }
 }
