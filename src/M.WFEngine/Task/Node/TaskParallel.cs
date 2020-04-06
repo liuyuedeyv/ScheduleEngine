@@ -9,7 +9,7 @@ using M.WorkFlow.Model;
 
 namespace M.WFEngine.Task
 {
-    [Autowired]
+    //[Autowired]
     public class TaskParallel : BaseTask
     {
         public override ETaskType TaskType => ETaskType.BingXing;

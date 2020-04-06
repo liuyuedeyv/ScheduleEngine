@@ -2,6 +2,7 @@
 using FD.Simple.Utils.Agent;
 using FD.Simple.Utils.Provider;
 using M.WFEngine.Flow;
+using M.WFEngine.Model;
 
 namespace M.WFEngine.Service
 {
@@ -17,7 +18,7 @@ namespace M.WFEngine.Service
         /// <param name="dataId"></param>
         /// <returns></returns>
         [Routing(EHttpMethod.HttpGet, "wft/start")]
-        public virtual CommonResult<int> StartWF(string serviceId, string dataId,string name)
+        public virtual CommonResult<int> StartWF(string serviceId, string dataId, string name)
         {
             if (string.IsNullOrWhiteSpace(serviceId) || string.IsNullOrWhiteSpace(dataId))
             {
@@ -25,7 +26,7 @@ namespace M.WFEngine.Service
             }
 
 
-            return _WorkFlow.Start(serviceId, dataId,name);
+            return _WorkFlow.Start(serviceId, dataId, name);
         }
         /// <summary>
         /// 异步任务回调方法
@@ -42,15 +43,36 @@ namespace M.WFEngine.Service
 
             return _WorkFlow.Callback(mqId);
         }
+
+        /// <summary>
+        /// 处理人处理任务
+        /// </summary> 
+        /// <returns></returns>
+
+        [Routing(EHttpMethod.HttpPost, "wft/run")]
+        public virtual CommonResult<int> RunWF(WFCmdRunModel runModel)
+        {
+            if (string.IsNullOrWhiteSpace(runModel?.OinsId))
+            {
+                throw new Exception($"Oinsid 不能为空");
+            }
+            if (string.IsNullOrWhiteSpace(runModel?.CmdId))
+            {
+                throw new Exception($"Cmdid 不能为空");
+            }
+
+            return _WorkFlow.Run(runModel);
+        }
+
         [Routing(EHttpMethod.HttpGet, "wft/giveup")]
-        public virtual CommonResult<int> giveup(string mqId,string reason)
+        public virtual CommonResult<int> giveup(string mqId, string reason)
         {
             if (string.IsNullOrWhiteSpace(mqId))
             {
                 return new WarnResult("mqId is not null");
             }
 
-            return _WorkFlow.GiveUp(mqId , reason);
+            return _WorkFlow.GiveUp(mqId, reason);
         }
 
         /// <summary>
@@ -61,7 +83,7 @@ namespace M.WFEngine.Service
         /// <returns></returns>
 
         [Routing(EHttpMethod.HttpGet, "wft/callbackfortaskerror")]
-        public virtual CommonResult<int> CallbackWFForTaskError(string mqId,string errorMsg)
+        public virtual CommonResult<int> CallbackWFForTaskError(string mqId, string errorMsg)
         {
             if (string.IsNullOrWhiteSpace(mqId))
             {
@@ -74,7 +96,7 @@ namespace M.WFEngine.Service
             }
 
             try
-            { 
+            {
                 return _WorkFlow.CallbackForTaskError(mqId, errorMsg);
 
             }
@@ -83,6 +105,13 @@ namespace M.WFEngine.Service
                 return new WarnResult(e.Message);
             }
         }
+
+        [Routing(EHttpMethod.HttpGet, "wft/manualProcess")]
+        public int ManualProcessWftevent()
+        {
+            return _WorkFlow.ProcessWftEvent(20);
+        }
+
 
         //[Routing(EHttpMethod.HttpGet, "wft/appname")]
         //public   string GetAppName(string mqId);

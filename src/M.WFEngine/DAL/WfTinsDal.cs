@@ -13,7 +13,7 @@ namespace M.WFEngine.Task.DAL
     public class WfTinsDal
     {
         [Autowired] //              
-        private DataAccess _da { get; set; }
+        public DataAccess _da { get; set; }
          
         public string GetIdByFinsIdAndTaskId(string finsId,string taskId)
         {

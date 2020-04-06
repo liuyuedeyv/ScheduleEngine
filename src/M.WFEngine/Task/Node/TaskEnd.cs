@@ -8,7 +8,7 @@ using System;
 
 namespace M.WFEngine.Task
 {
-    [Autowired]
+    //[Autowired]
     public class TaskEnd : BaseTask
     {
         public override ETaskType TaskType => ETaskType.End;
@@ -18,7 +18,7 @@ namespace M.WFEngine.Task
             return false;
         }
 
-        public override void CreateJob(WFFinsEntity fins, WFTinsEntity tinsEntity, bool needWaitCallback)
+        public override void CreateJob(WFFinsEntity fins, WFTinsEntity tinsEntity)
         {
             //Console.WriteLine($"结束节点{tinsEntity.Taskname}开始执行……");
 

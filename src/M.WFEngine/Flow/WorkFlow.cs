@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using System.Data.Common;
 using System.Collections;
 using System.Collections.Generic;
+using M.WFEngine.Model;
 
 namespace M.WFEngine.Flow
 {
@@ -40,10 +41,27 @@ namespace M.WFEngine.Flow
         public ILogger<WorkFlow> _Logger { get; set; }
 
         [Autowired] //              
-        private WfTEventDal _WfTEventDal { get; set; }
+        private IWFTeventDao _WfTEventDal { get; set; }
 
         [Autowired] //              
         private WfFinsDal _WfFinsDal { get; set; }
+
+
+        [Autowired] //              
+        private IWFOInsDao _WfOInsDao { get; set; }
+
+
+        [Autowired] //              
+        private IWFCmdDao _WfCmdDao { get; set; }
+
+
+        [Autowired] //              
+        private IWFTeventDao _WfTeventDao { get; set; }
+
+
+        [Autowired] //              
+        private IWFFinsDao _WfFinsDao { get; set; }
+
         #endregion
 
         #region Start
@@ -82,7 +100,7 @@ namespace M.WFEngine.Flow
 
                 var nextTask = nextTasks[0];
                 var tinsNext = _WFTask.CreateTaskIns(fins, nextTask);
-                _WFTask.GetTaskInfo(nextTask).CreateJob(fins, tinsNext, IsNeedCallback(nextTask.Type));
+                _WFTask.GetTaskInfo(nextTask).CreateJob(fins, tinsNext);
                 trans.Commit();
             }
             return 1;
@@ -107,8 +125,6 @@ namespace M.WFEngine.Flow
         #region ProcessWftEvent
         public int ProcessWftEvent(uint batchCount)
         {
-
-
 
             var filter = TableFilter.New().Equals("status", 0);//.Equals("waitcallback", 0);
                                                                //#if DEBUG
@@ -136,7 +152,7 @@ namespace M.WFEngine.Flow
                 {
                     try
                     {
-                        Run(job);
+                        ProcessEvent(job);
                     }
                     catch (HttpRequestException ex)
                     {
@@ -155,7 +171,7 @@ namespace M.WFEngine.Flow
         }
 
 
-        private int Run(WFTEventEntity eventEntity)
+        private int ProcessEvent(WFTEventEntity eventEntity)
         {
             var taskEntity = _WFTask.GetTaskById(eventEntity.Taskid);
             var taskSetting = _WFTask.GetTaskInfo(taskEntity);
@@ -236,7 +252,7 @@ namespace M.WFEngine.Flow
                 {
                     var tinsNext = _WFTask.CreateTaskIns(fins, nextTask);
                     var taskSetting = _WFTask.GetTaskInfo(nextTask);
-                    taskSetting.CreateJob(fins, tinsNext, IsNeedCallback(nextTask.Type));
+                    taskSetting.CreateJob(fins, tinsNext);
                 }
             }
         }
@@ -329,15 +345,11 @@ namespace M.WFEngine.Flow
             return 1;
         }
 
-        private bool IsNeedCallback(ETaskType taskType)
-        {
-            return taskType == ETaskType.WorkAsyncSendHttp
-                  || taskType == ETaskType.WorkAsyncSendMQ;
-        }
 
         #endregion
 
         #region CallbackForTaskError
+        //TODO:此方法属于流程应用层方法，需要迁移走
         /// <summary>
         /// 回调任务并注册错误信息
         /// </summary>
@@ -402,7 +414,7 @@ namespace M.WFEngine.Flow
         public CommonResult<int> GiveUp(string mqId, string reason)
         {
             //根据MQID
-            var en = this._WfTEventDal.Get(mqId);
+            var en = this._WfTEventDal.SelectById(mqId);
 
             if (en == null)
             {
@@ -441,6 +453,124 @@ namespace M.WFEngine.Flow
             }
 
             return 1;
+        }
+
+        #endregion
+
+        #region 处理人处理流程任务
+        public int Run(WFCmdRunModel runModel)
+        {
+            #region check
+            if (string.IsNullOrWhiteSpace(runModel?.OinsId))
+            {
+                throw new Exception($"Oinsid 不能为空");
+            }
+            if (string.IsNullOrWhiteSpace(runModel?.CmdId))
+            {
+                throw new Exception($"Cmdid 不能为空");
+            }
+            var oinsEntity = _WfOInsDao.SelectById(runModel.OinsId);
+            if (oinsEntity == null)
+            {
+                throw new Exception($"处理任务{runModel.OinsId }不存在");
+            }
+            var cmdEntity = _WfCmdDao.SelectById(runModel.CmdId);
+            if (cmdEntity == null)
+            {
+                throw new Exception($"处理命令{runModel.CmdId }不存在");
+            }
+            var tinsEntity = _WFTask.GetTinsById(oinsEntity.TinsId);
+            var taskEntity = _WFTask.GetTaskById(oinsEntity.TaskId);
+            var fins = _WorkFlowIns.GetFlowInstance(oinsEntity.FinsId);
+            var eventEntity = _WfTeventDao.SelectByTinsId(tinsEntity.ID, fins.Dataid);
+            if (eventEntity == null)
+            {
+                throw new Exception($"回调任务不存在");
+            }
+            if (eventEntity.ProcessDate == DateTime.MinValue)
+            {
+                throw new Exception($"回到任务会处理完毕，请稍后回调");
+            }
+            #endregion
+
+            WFTaskEntity[] nextTasks = null;
+            if (cmdEntity.CmdType != EWFCmdType.Reject)
+            {
+                var bisJsonData = GetBisData(taskEntity, fins.Dataid, fins.ServiceId, oinsEntity.TinsId, out bool isMultipleNextTask);
+                nextTasks = _WFTask.GetNextTasks(taskEntity, tinsEntity, bisJsonData, runModel);
+                if (nextTasks.Length != 1)
+                {
+                    throw new Exception("流程配置错误，下个任务节点数量必须是1");
+                }
+            }
+            using (var tran = TransHelper.BeginTrans())
+            {
+                //1、更新处理人实例状态
+                oinsEntity.ProcessDate = DateTime.Now;
+                oinsEntity.Status = 1;
+                _WfOInsDao.ProcessTask(oinsEntity);
+                bool isContinue = IsContinue(taskEntity, tinsEntity.ID);
+                if (!isContinue)
+                {
+                    //会签节点非最后一个节点需要返回
+                    return 1;
+                }
+                //2、更新任务实例状态
+                eventEntity.Waitcallback = 0;
+                eventEntity.Callbackdate = DateTime.Now;
+                _WfTeventDao.UpdateCallback(eventEntity);
+
+                tinsEntity.State = EDBEntityState.Modified;
+                tinsEntity.Edate = DateTime.Now;
+                _DataAccess.Update(tinsEntity);
+
+                if (cmdEntity.CmdType == EWFCmdType.Reject)
+                {
+                    //设置流程实例状态为结束
+                    Reject(fins);
+                    tran.Commit();
+                }
+                else
+                {
+                    //3、找下个任务节点，并流转，回调节点不应该有多个下个节点
+                    //如果下一个节点是聚合节点，则需要加锁，防止与回调冲突。默认等待10S
+                    if (nextTasks[0].Type == ETaskType.JuHe)
+                    {
+                        var lockKey = $"{MutexConfig.WORKFLOWLOCKPRE}{fins.Dataid}";
+                        var success = ExeWithLock(lockKey, MutexConfig.WORKFLOWLOCKTIMEOUT, () =>
+                        {
+                            ExeNextTask(fins, nextTasks);
+                            tran.Commit();
+                        });
+                        if (!success)
+                        {
+                            throw new Exception($"未获取独占锁，请重试，dataid：{fins.Dataid }");
+                        }
+                    }
+                    else
+                    {
+                        ExeNextTask(fins, nextTasks);
+                        tran.Commit();
+                    }
+                }
+            }
+            return 1;
+        }
+
+        int Reject(WFFinsEntity fins)
+        {
+            fins.Status = (int)EFlowStatus.Reject;
+            fins.Edate = DateTime.Now;
+            return _WfFinsDao.Reject(fins);
+        }
+        bool IsContinue(WFTaskEntity taskEntity, string tinsId)
+        {
+            //TODO:非会签直接流转，会签节点需要判断同节点处理人是否处理完毕
+            if (taskEntity.Type == ETaskType.Operator)
+            {
+                return true;
+            }
+            return true;
         }
         #endregion
     }

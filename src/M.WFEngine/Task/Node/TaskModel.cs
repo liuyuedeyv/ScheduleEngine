@@ -16,7 +16,7 @@ namespace M.WFEngine.Task
     /// <summary>
     /// 决策节点
     /// </summary>
-    [Autowired]
+    //[Autowired]
     public class TaskModel : BaseTask
     {
         IJsonConverter _jsonConverter;

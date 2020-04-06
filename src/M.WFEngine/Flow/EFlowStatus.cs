@@ -6,6 +6,10 @@
     public enum EFlowStatus
     {
         /// <summary>
+        /// 流程异常
+        /// </summary>
+        Error = -1,
+        /// <summary>
         /// 草稿状态
         /// </summary>
         NotStarted = 0,
@@ -14,16 +18,16 @@
         /// </summary>
         Starting = 1,
         /// <summary>
-        /// 结束
+        /// 正常结束
         /// </summary>
         Completed = 2,
         /// <summary>
-        /// 流程异常
+        /// 流程拒绝
         /// </summary>
-        Error = -1,
+        Reject = 3,
         /// <summary>
         /// 流程废弃
         /// </summary>
-        GiveUp=4,
+        GiveUp = 4,
     }
 }

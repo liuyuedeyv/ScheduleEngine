@@ -10,7 +10,7 @@ using System.Linq;
 namespace M.WFEngine.Task
 {
 
-    [Autowired]
+    //[Autowired]
     public class TaskWork : BaseTask
     {
         public override ETaskType TaskType => ETaskType.Work;

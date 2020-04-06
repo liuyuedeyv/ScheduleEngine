@@ -1,4 +1,5 @@
 ﻿using FD.Simple.Utils.Provider;
+using M.WFEngine.Model;
 
 namespace M.WFEngine.Flow
 {
@@ -37,5 +38,11 @@ namespace M.WFEngine.Flow
         /// <param name="mqId"></param>
         /// <returns></returns>
         CommonResult<int> GiveUp(string mqId,string reason);
+        /// <summary>
+        /// 流程任务处理人处理任务
+        /// </summary>
+        /// <param name="runModel"></param>
+        /// <returns></returns>
+        int Run(WFCmdRunModel runModel);
     }
 }

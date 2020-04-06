@@ -8,7 +8,7 @@ using System.Text;
 
 namespace M.WFEngine.Task
 {
-    [Autowired]
+    //[Autowired]
     public class TaskStart : BaseTask
     {
         public override ETaskType TaskType => ETaskType.Start;

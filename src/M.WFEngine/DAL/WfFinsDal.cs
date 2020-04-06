@@ -12,7 +12,7 @@ namespace M.WFEngine.Flow.DAL
     public class WfFinsDal
     {
         [Autowired] //              
-        private DataAccess _da { get; set; }
+        public DataAccess _da { get; set; }
         
         public WFFinsEntity Get(string id)
         {

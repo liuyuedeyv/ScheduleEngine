@@ -9,9 +9,10 @@ using M.WFEngine.Task.DAL;
 
 namespace M.WFEngine.Task
 {
-    [Autowired]
+    //[Autowired]
     public abstract class BaseTask : IBaseTask
     {
+
         [Autowired]
         public DataAccess _DataAccess { get; set; }
         [Autowired]
@@ -20,6 +21,11 @@ namespace M.WFEngine.Task
         public IAppAccessService _IAppAccessService { get; set; }
 
         public abstract ETaskType TaskType { get; }
+        /// <summary>
+        /// 创建event job时是否需要等等回调。默认：false
+        /// </summary>
+        public virtual bool NeedWaitCallbackWhenCreateJob { get; } = false;
+
 
         [Autowired] //              
         public WfTdataDal _WfTdataDal { get; set; }
@@ -87,7 +93,7 @@ namespace M.WFEngine.Task
         /// <summary>
         /// 流转到下一步
         /// </summary>
-        public virtual void CreateJob(WFFinsEntity fins, WFTinsEntity tinsEntity, bool needWaitCallback)
+        public virtual void CreateJob(WFFinsEntity fins, WFTinsEntity tinsEntity)
         {
             //插入MQ，流程监控启动
             WFTEventEntity nextEntity = new WFTEventEntity();
@@ -98,7 +104,7 @@ namespace M.WFEngine.Task
             nextEntity.Dataid = fins.Dataid;
             nextEntity.Tinsid = tinsEntity.ID;
             nextEntity.Status = 0;
-            nextEntity.Waitcallback = needWaitCallback ? 1 : 0;
+            nextEntity.Waitcallback = NeedWaitCallbackWhenCreateJob ? 1 : 0;
             nextEntity.Cdate = System.DateTime.Now;
 
             _DataAccess.Update(nextEntity);

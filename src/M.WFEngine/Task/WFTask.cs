@@ -7,6 +7,8 @@ using M.WorkFlow.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
+using M.WFEngine.Model;
 
 namespace M.WFEngine.Task
 {
@@ -74,6 +76,12 @@ namespace M.WFEngine.Task
             return tasks.ToArray();
         }
 
+        public WFTaskEntity[] GetNextTasks(WFTaskEntity preTask, WFTinsEntity tinsEntity, string bisJsonData, WFCmdRunModel runModel)
+        {
+            //TOOD:增加处理名称来选择下一个节点
+            return GetNextTasks(preTask, tinsEntity, bisJsonData);
+        }
+
         public WFTaskEntity[] GetPreTasks(WFTaskEntity nextTask)
         {
             var filter = TableFilter.New().Equals("ENDTASKID", nextTask.ID);
@@ -105,7 +113,18 @@ namespace M.WFEngine.Task
         public BaseTask GetTaskInfo(WFTaskEntity taskEntity)
         {
             ETaskType taskType = taskEntity.Type;
-            var taskInfo = Tasks.Where(t => (t as BaseTask).TaskType == taskType).FirstOrDefault() as BaseTask;
+
+
+            BaseTask taskInfo = null;
+
+            foreach (var task in Tasks)
+            {
+                if ((task as BaseTask).TaskType == taskType)
+                {
+                    taskInfo = task as BaseTask;
+                }
+            }
+            //Tasks.Where(t => (t as BaseTask).TaskType == taskType).FirstOrDefault() as BaseTask;
             if (taskInfo == null)
             {
                 throw new Exception($"类型{taskType}没有实现");

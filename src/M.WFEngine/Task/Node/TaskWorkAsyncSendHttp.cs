@@ -7,7 +7,7 @@ using System.Net.Http;
 
 namespace M.WFEngine.Task
 {
-    [Autowired]
+    //[Autowired]
     public class TaskWorkAsyncSendHttp : BaseTask
     {
 
@@ -21,6 +21,7 @@ namespace M.WFEngine.Task
 
         public override ETaskType TaskType => ETaskType.WorkAsyncSendHttp;
 
+        public override bool NeedWaitCallbackWhenCreateJob => true;
         public override bool RunTask(WFTaskEntity taskEntity, WFFinsEntity fins, WFTinsEntity tinsEntity, WFTEventEntity enventEntity)
         {
             // 根据tasksetting 节点的配置信息读取要发送到的远端地址

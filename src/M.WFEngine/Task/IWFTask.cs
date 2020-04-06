@@ -1,4 +1,5 @@
-﻿using M.WorkFlow.Model;
+﻿using M.WFEngine.Model;
+using M.WorkFlow.Model;
 using System.Collections.Generic;
 
 namespace M.WFEngine.Task
@@ -21,6 +22,10 @@ namespace M.WFEngine.Task
         /// 获取下一个执行任务，如果是并行任务返回多个
         /// </summary>
         WFTaskEntity[] GetNextTasks(WFTaskEntity preTask, WFTinsEntity tinsEntity, string bisJsonData);
+        /// <summary>
+        /// 处理人节点，获取下一个执行任务，如果是并行任务返回多个
+        /// </summary>
+        WFTaskEntity[] GetNextTasks(WFTaskEntity preTask, WFTinsEntity tinsEntity, string bisJsonData, WFCmdRunModel runModel);
         /// <summary>
         /// 获取下一个执行任务，如果是并行任务返回多个
         /// </summary>

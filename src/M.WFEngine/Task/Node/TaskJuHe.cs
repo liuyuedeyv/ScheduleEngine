@@ -8,7 +8,7 @@ using M.WorkFlow.Model;
 
 namespace M.WFEngine.Task
 {
-    [Autowired]
+    //[Autowired]
     public class TaskJuHe : BaseTask
     {
         public override ETaskType TaskType => ETaskType.JuHe;

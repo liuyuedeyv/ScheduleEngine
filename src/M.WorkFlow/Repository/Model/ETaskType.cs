@@ -33,6 +33,10 @@
         /// <summary>
         /// 异步任务发送MQ
         /// </summary>
-        WorkAsyncSendMQ = 8
+        WorkAsyncSendMQ = 8,
+        /// <summary>
+        /// 处理人节点
+        /// </summary>
+        Operator = 9
     }
 }

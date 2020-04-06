@@ -13,7 +13,7 @@ namespace M.WFEngine.Task.DAL
     public class WfTdataDal
     {
         [Autowired] //              
-        private DataAccess _da { get; set; }
+        public DataAccess _da { get; set; }
 
         public void Add(string flowId,string finsid,string taskId,string tinsId,string jsonData)
         {
