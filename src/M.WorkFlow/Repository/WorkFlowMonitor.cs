@@ -80,12 +80,15 @@ namespace M.WFDesigner.Repository
                 {
                     //TODOWHP 待完善	on 2020-03-28 09:41:14
                     //eventArr.Data.All(o=>o.Tinsid=en.ID)
+                } 
+            }
+
+            foreach (WFLinkEntity link in en.WfFlow.Links)
+            {
+                if (en.TaskIns.Any(o => o.Taskid == link.Begintaskid) && en.TaskIns.Any(o => o.Taskid == link.Endtaskid))
+                {
+                    en.LinkIns.Add(link);
                 }
-                //根据节点信息维护线规则
-                if (i == (en.TaskIns.Count - 1)) break; // 如果是最后一个节点,则操作
-                WFTinsEntity endTIns = en.TaskIns[i + 1];
-                WFLinkEntity links=en.WfFlow.Links.Find(o => o.Begintaskid == startTIns.Taskid && o.Endtaskid == endTIns.Taskid);
-                en.LinkIns.Add(links);
             }
            
 
